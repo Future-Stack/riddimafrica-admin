@@ -10,15 +10,15 @@ export interface StatsCardHeaderProps {
 }
 
 export interface StatsCardFooterProps {
-    description: ReactNode;
-    actionText: string;
+    description?: ReactNode;
+    actionText?: string;
     actionHref?: string;
     onActionClick?: () => void; 
 }
 
 export interface StatsCardProps {
     headerProps: StatsCardHeaderProps;
-    footerProps: StatsCardFooterProps;
+    footerProps?: StatsCardFooterProps;
     value: string | number;
     bgColor: string;
 }

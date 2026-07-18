@@ -20,12 +20,12 @@ export default function DashboardPage() {
         <WeeklyRevenueChart/>
         <TopSeller/>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <div className="lg:col-span-8 h-full">
                     <RecentOrdersSection />
                 </div>
 
-                <div className="lg:col-span-4">
+                <div className="lg:col-span-4 h-full">
                     <QuickActionsPage />
                 </div>
             </div>

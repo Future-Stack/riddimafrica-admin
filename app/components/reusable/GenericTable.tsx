@@ -51,8 +51,9 @@ export default function GenericTable<T>({
                             {columns.map((col, index) => (
                                 <th
                                     key={index}
-                                    className={`py-3.5 px-5 text-sm sm:text-base font-medium leading-5 text-center tracking-wide border-r last:border-r-0 ${col.className || ""}`}
-                                    style={{ borderColor: "#E4E6E733" }}
+                                    className={`py-4 px-5 text-sm sm:text-base leading-6 border-r last:border-r-0 font-medium border-[#EEF2FF] ${col.className ?? ""
+                                        }`}
+                                    style={{ borderColor }}
                                 >
                                     {col.header}
                                 </th>
@@ -61,13 +62,13 @@ export default function GenericTable<T>({
                     </thead>
 
                     {/* Body Rows */}
-                    <tbody className="divide-y devide-[#EEF2FF] text-[#2c2c2c]" >
+                    <tbody className="bg-[#FAF7F3] text-[#2c2c2c]" >
                         {data.map((row, rowIndex) => (
-                            <tr key={rowIndex} className={`transition-colors ${rowHoverBg}`}>
+                            <tr key={rowIndex} className={`transition-colors border-b border-[#EEF2FF] ${rowHoverBg}`}>
                                 {columns.map((col, colIndex) => (
                                     <td
                                         key={colIndex}
-                                        className={`py-4 px-5 text-sm sm:text-base leading-6  border-r last:border-r-0 font-medium ${col.className || "border-[#EEF2FF]"}`}
+                                        className={`py-4 px-5 text-sm sm:text-base text-center leading-6  border-r last:border-r-0 font-medium font-inter ${col.className || "border-[#EEF2FF]"}`}
                                         style={{ borderColor }}
                                     >
                                         {col.render ? col.render(row) : (row as any)[col.key]}

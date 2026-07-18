@@ -142,7 +142,7 @@ const QuickActionsPage: React.FC = () => {
     };
 
     return (
-        <div className="  flex flex-col gap-6 w-full">
+        <div className=" h-full flex flex-col gap-6 w-full">
 
             {/* --- Quick Actions Section --- */}
             <section className="p-5 bg-[#FAF7F3] rounded-xl border border-[#E4E6E7]">
