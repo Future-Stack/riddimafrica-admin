@@ -18,7 +18,7 @@ export default function Card() {
                     }}
                     footerProps={{
                         description: "Sellers + Products",
-                        actionText: "View All",
+                        actionText: "View All →",
                         actionHref: "/approvals" 
                     }}
                 />
@@ -38,7 +38,7 @@ export default function Card() {
                                 <span className="">↑ 18%</span> vs yesterday
                             </span>
                         ),
-                        actionText: "View Report",
+                        actionText: "View Report →",
                         actionHref: "/reports/revenue"
                     }}
                 />
@@ -61,7 +61,7 @@ export default function Card() {
                     }}
                     footerProps={{
                         description: "8 need attention",
-                        actionText: "View All",
+                        actionText: "View All →",
                         actionHref: "/orders"
                     }}
                 />
@@ -77,7 +77,7 @@ export default function Card() {
                     }}
                     footerProps={{
                         description: "Stream: LIVE 99.8%",
-                        actionText: "Manage",
+                        actionText: "Manage →",
                         actionHref: "/radio/manage"
                     }}
                 />

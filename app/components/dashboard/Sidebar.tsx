@@ -30,7 +30,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     const menuItems: NavItem[] = [
         { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
         { label: "User Management", icon: <UsersIcon />, path: "/dashboard/users" },
-        { label: "Artists", icon: <ArtistsIcon />, path: "/dashboard/community" },
+        { label: "Artists", icon: <ArtistsIcon />, path: "/dashboard/artist" },
         { label: "Sellers", icon: <SellersIcon />, path: "/dashboard/subscription" },
         { label: "Products", icon: <ProductsIcon />, path: "/dashboard/payments" },
         { label: "Orders", icon: <OrderIcon />, path: "/dashboard/community" },

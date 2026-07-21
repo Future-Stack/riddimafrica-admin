@@ -39,11 +39,12 @@ export default function GenericTable<T>({
     pagination,
 }: GenericTableProps<T>) {
     return (
-        <div className="w-full  rounded-xl font-inter overflow-hidden">
+        <div className="w-full  font-inter overflow-hidden">
+            <div className="p-4  bg-[#FAF7F3] border border-[#E4E6E7] rounded-xl">
 
             {/* Table Wrapper (Responsive Overflow Container) */}
-            <div className="w-full overflow-x-auto border border-[#EEF2FF] rounded-lg shadow-sm" style={{ borderColor }}>
-                <table className="w-full text-left border-collapse table-auto min-w-[700px]">
+            <div className="w-full overflow-x-auto border border-[#EEF2FF]  rounded-lg " style={{ borderColor }}>
+                <table className="w-full text-left border-collapse  table-auto min-w-[1100px]">
 
                     {/* Header Line */}
                     <thead>
@@ -79,6 +80,7 @@ export default function GenericTable<T>({
                     </tbody>
                 </table>
             </div>
+            </div>
 
             {/* Pagination Component - conditional render */}
             {pagination && (
@@ -86,17 +88,19 @@ export default function GenericTable<T>({
                     <button
                         onClick={() => pagination.onPageChange(Math.max(1, pagination.currentPage - 1))}
                         disabled={pagination.currentPage === 1}
-                        className="flex items-center gap-1 px-2 py-1 hover:text-black disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                        className="flex items-center gap-1 px-2 py-1 text-black text-sm font-medium leading-5 font-inter disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
                     >
-                        ‹ Previous
+                        <svg xmlns="http://www.w3.org/2000/svg" width="5" height="9" viewBox="0 0 5 9" fill="none">
+                            <path d="M4.5 8.5L0.5 4.5L4.5 0.5" stroke="#09090B" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg> Previous
                     </button>
 
                     {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
                         <button
                             key={page}
                             onClick={() => pagination.onPageChange(page)}
-                            className={`w-8 h-8 flex items-center justify-center rounded-md border text-xs font-bold cursor-pointer transition-colors ${pagination.currentPage === page
-                                    ? "bg-[#ede2d1] border-[#c5baab] text-black"
+                            className={`w-8 h-8 flex items-center justify-center rounded-md border text-sm font-medium leading-5 font-inter cursor-pointer transition-colors ${pagination.currentPage === page
+                                ? "bg-[#FBF1E1] border-[#624D3B] text-black"
                                     : "bg-transparent border-transparent hover:bg-gray-100"
                                 }`}
                         >
@@ -109,9 +113,11 @@ export default function GenericTable<T>({
                     <button
                         onClick={() => pagination.onPageChange(Math.min(pagination.totalPages, pagination.currentPage + 1))}
                         disabled={pagination.currentPage === pagination.totalPages}
-                        className="flex items-center gap-1 px-2 py-1 hover:text-black disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                        className="flex items-center gap-1 px-2 py-1 text-black text-sm font-medium leading-5 font-inter disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
                     >
-                        Next ›
+                        Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M6 12L10 8L6 4" stroke="#09090B" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </button>
                 </div>
             )}

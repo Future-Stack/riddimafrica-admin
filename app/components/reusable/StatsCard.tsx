@@ -51,7 +51,7 @@ export const StatsCardFooter: React.FC<StatsCardFooterProps> = ({
     const content = (
         <>
             {actionText}
-            <span className="transform group-hover:translate-x-0.5 transition-transform">→</span>
+            <span className="transform group-hover:translate-x-0.5 transition-transform"></span>
         </>
     );
 
@@ -84,19 +84,20 @@ export const StatsCard: React.FC<StatsCardProps> = ({
     bgColor
 }) => {
     return (
-        <div className={`flex flex-col justify-between p-5 rounded-xl text-white shadow-lg min-w-[260px] flex-1 ${bgColor}`}>
-   
+        <div className={`flex flex-col p-5 rounded-xl text-white shadow-lg min-w-[260px] flex-1 ${bgColor}`}>
             <StatsCardHeader {...headerProps} />
 
-        
-            <div className="my-2">
-                <h2 className="text-2xl font-bold font-fraunces tracking-tight md:text-3xl text-[#E6E8EB] leading-8">
+            <div className="mt-2">
+                <h2 className="text-2xl font-bold font-fraunces tracking-tight md:text-3xl text-[#E6E8EB]">
                     {value}
                 </h2>
             </div>
 
-      
-            <StatsCardFooter {...footerProps} />
+            {footerProps && (
+                <div className="mt-4">
+                    <StatsCardFooter {...footerProps} />
+                </div>
+            )}
         </div>
     );
 };
