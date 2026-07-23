@@ -1,9 +1,9 @@
 
-import { Clock, RefreshCw, ShoppingCart, Radio } from "lucide-react";
+import {  Radio } from "lucide-react";
 import { StatsCard } from "../../reusable/StatsCard";
-import { UsersIcon } from "../SidebarIcon";
 
-export default function ArtistCard() {
+
+export default function SellerCard() {
     return (
         <main className="">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -13,7 +13,7 @@ export default function ArtistCard() {
                     bgColor="bg-[#3C182F]"
                     value="200"
                     headerProps={{
-                        title: "Total Registered Artist",
+                        title: "Total Registered Seller",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M13.8493 12C14.3488 12 14.7462 11.6856 15.1029 11.2461C15.8332 10.3463 14.6342 9.62723 14.1768 9.27507C13.712 8.91708 13.1929 8.71428 12.6666 8.66667M11.9999 7.33333C12.9204 7.33333 13.6666 6.58714 13.6666 5.66667C13.6666 4.74619 12.9204 4 11.9999 4" stroke="#E6A400" stroke-linecap="round" />
                             <path d="M2.1506 12C1.65106 12 1.25374 11.6856 0.89699 11.2461C0.166685 10.3463 1.36574 9.62723 1.82306 9.27507C2.28794 8.91708 2.80701 8.71428 3.33329 8.66667M3.66663 7.33333C2.74615 7.33333 1.99996 6.58714 1.99996 5.66667C1.99996 4.74619 2.74615 4 3.66663 4" stroke="#E6A400" stroke-linecap="round" />
@@ -29,7 +29,7 @@ export default function ArtistCard() {
                     bgColor="bg-[#3C4762]"
                     value="180"
                     headerProps={{
-                        title: "Active Artist",
+                        title: "Active Seller",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M8.00002 8.00016C9.84097 8.00016 11.3334 6.50778 11.3334 4.66683C11.3334 2.82588 9.84097 1.3335 8.00002 1.3335C6.15907 1.3335 4.66669 2.82588 4.66669 4.66683C4.66669 6.50778 6.15907 8.00016 8.00002 8.00016Z" stroke="#E200E6" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M2.27332 14.6667C2.27332 12.0867 4.83998 10 7.99998 10C8.63998 10 9.25999 10.0867 9.83999 10.2467" stroke="#E200E6" stroke-linecap="round" stroke-linejoin="round" />

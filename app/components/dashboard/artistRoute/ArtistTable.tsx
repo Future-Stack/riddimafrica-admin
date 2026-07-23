@@ -60,8 +60,6 @@ const INITIAL_ARTISTS: ArtistData[] = [
 ];
 
 const PAGE_SIZE = 8;
-// "Sales" filter buckets on the Amount column — adjust to whatever
-// counts as high/low revenue for your product.
 const LOW_REVENUE_CEILING = 15000;
 
 type SalesFilterType = "All" | "High Revenue" | "Low Revenue" | "No Sales";
@@ -122,19 +120,16 @@ export function ArtistTable() {
     );
 
     const handleApprove = (id: number) => {
-        // TODO: call your approve-artist API here
         setArtists((prev) => prev.map((a) => (a.id === id ? { ...a, status: "Approved" } : a)));
         setProfileTarget(null);
     };
 
     const handleReject = (id: number) => {
-        // TODO: call your reject-artist API here
         setArtists((prev) => prev.map((a) => (a.id === id ? { ...a, status: "Rejected" } : a)));
         setProfileTarget(null);
     };
 
     const handleMessage = (id: number) => {
-        // TODO: open your messaging flow for this artist
         console.log(`Message artist ${id}`);
     };
 
@@ -147,7 +142,7 @@ export function ArtistTable() {
                     <img src={row.avatar} alt={row.name} className="w-8 h-8 rounded-full object-cover" />
                     <div>
                         <p className="font-medium text-sm sm:text-base text-[#101828] leading-5 font-inter">{row.name}</p>
-                        <p className="text-xs text-[#A3968A]">{row.genre}</p>
+                        <p className="text-xs text-gray-600 text-left">{row.genre}</p>
                     </div>
                 </div>
             )

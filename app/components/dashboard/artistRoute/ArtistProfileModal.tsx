@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { CircleX, X } from "lucide-react";
 
 export interface ArtistProfileData {
     id: number;
@@ -53,8 +53,8 @@ export function ArtistProfileModal({
             <div className="w-full max-w-3xl bg-white border border-[#EFEAE2] rounded-2xl p-6 shadow-xl relative">
                 <div className="flex items-center justify-between mb-5">
                     <h2 className="text-xl md:text-2xl  font-bold text-titleColor leading-7 font-inter">Artist Profile</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <X className="w-5 h-5" />
+                    <button onClick={onClose} className="text-[#3E2723] hover:text-gray-600 cursor-pointer">
+                        <CircleX />
                     </button>
                 </div>
 

@@ -64,7 +64,8 @@ export default function GenericTable<T>({
 
                     {/* Body Rows */}
                     <tbody className="bg-[#FAF7F3] text-[#2c2c2c]" >
-                        {data.map((row, rowIndex) => (
+                            {data.length > 0 ? (
+                        data.map((row, rowIndex) => (
                             <tr key={rowIndex} className={`transition-colors border-b border-[#EEF2FF] ${rowHoverBg}`}>
                                 {columns.map((col, colIndex) => (
                                     <td
@@ -76,7 +77,17 @@ export default function GenericTable<T>({
                                     </td>
                                 ))}
                             </tr>
-                        ))}
+                        ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={columns.length}
+                                        className="py-12 text-center text-gray-500 text-base"
+                                    >
+                                        No data matches your filters.
+                                    </td>
+                                </tr>
+                            )}
                     </tbody>
                 </table>
             </div>
