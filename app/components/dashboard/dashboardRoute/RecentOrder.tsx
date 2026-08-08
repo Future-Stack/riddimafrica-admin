@@ -76,8 +76,8 @@ export function RecentOrdersSection() {
     ];
 
     return (
-        <div className="p-5 bg-[#FAF7F3] rounded-xl border border-[#E4E6E7] h-full">
-            <div className="flex justify-between items-center mb-4">
+        <div className=" bg-[#FAF7F3] rounded-xl border border-[#E4E6E7] h-full">
+            <div className="flex justify-between items-center  px-5 pt-5">
                 <h2 className="text-base sm:text-lg font-medium leaidng-7 text-titleColor font-inter">Recent Orders</h2>
                 <button className="text-[#E6A400] text-xs font-medium hover:underline cursor-pointer">View all →</button>
             </div>

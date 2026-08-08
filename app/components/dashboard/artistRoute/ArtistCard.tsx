@@ -3,7 +3,7 @@ import { Clock, RefreshCw, ShoppingCart, Radio } from "lucide-react";
 import { StatsCard } from "../../reusable/StatsCard";
 import { UsersIcon } from "../SidebarIcon";
 
-export default function UserCard() {
+export default function ArtistCard() {
     return (
         <main className="">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -13,7 +13,7 @@ export default function UserCard() {
                     bgColor="bg-[#3C182F]"
                     value="200"
                     headerProps={{
-                        title: "Total Users",
+                        title: "Total Registered Artist",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M13.8493 12C14.3488 12 14.7462 11.6856 15.1029 11.2461C15.8332 10.3463 14.6342 9.62723 14.1768 9.27507C13.712 8.91708 13.1929 8.71428 12.6666 8.66667M11.9999 7.33333C12.9204 7.33333 13.6666 6.58714 13.6666 5.66667C13.6666 4.74619 12.9204 4 11.9999 4" stroke="#E6A400" stroke-linecap="round" />
                             <path d="M2.1506 12C1.65106 12 1.25374 11.6856 0.89699 11.2461C0.166685 10.3463 1.36574 9.62723 1.82306 9.27507C2.28794 8.91708 2.80701 8.71428 3.33329 8.66667M3.66663 7.33333C2.74615 7.33333 1.99996 6.58714 1.99996 5.66667C1.99996 4.74619 2.74615 4 3.66663 4" stroke="#E6A400" stroke-linecap="round" />
@@ -29,24 +29,24 @@ export default function UserCard() {
                     bgColor="bg-[#3C4762]"
                     value="180"
                     headerProps={{
-                        title: "Active User",
+                        title: "Active Artist",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M7.99996 7.99992C9.84091 7.99992 11.3333 6.50753 11.3333 4.66658C11.3333 2.82564 9.84091 1.33325 7.99996 1.33325C6.15901 1.33325 4.66663 2.82564 4.66663 4.66658C4.66663 6.50753 6.15901 7.99992 7.99996 7.99992Z" stroke="#091E51" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M2.27332 14.6667C2.27332 12.0867 4.83998 10 7.99998 10C8.63998 10 9.25999 10.0867 9.83999 10.2467" stroke="#091E51" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M14.6667 11.9999C14.6667 12.4999 14.5267 12.9733 14.28 13.3733C14.14 13.6133 13.96 13.8266 13.7534 13.9999C13.2867 14.4199 12.6734 14.6666 12 14.6666C11.0267 14.6666 10.18 14.1466 9.72003 13.3733C9.47337 12.9733 9.33337 12.4999 9.33337 11.9999C9.33337 11.1599 9.72004 10.4066 10.3334 9.91992C10.7934 9.55326 11.3734 9.33325 12 9.33325C13.4734 9.33325 14.6667 10.5266 14.6667 11.9999Z" stroke="#091E51" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M10.9601 12L11.6201 12.66L13.0401 11.3467" stroke="#091E51" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8.00002 8.00016C9.84097 8.00016 11.3334 6.50778 11.3334 4.66683C11.3334 2.82588 9.84097 1.3335 8.00002 1.3335C6.15907 1.3335 4.66669 2.82588 4.66669 4.66683C4.66669 6.50778 6.15907 8.00016 8.00002 8.00016Z" stroke="#E200E6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M2.27332 14.6667C2.27332 12.0867 4.83998 10 7.99998 10C8.63998 10 9.25999 10.0867 9.83999 10.2467" stroke="#E200E6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M14.6666 12.0002C14.6666 12.5002 14.5267 12.9735 14.28 13.3735C14.14 13.6135 13.96 13.8268 13.7533 14.0002C13.2866 14.4202 12.6733 14.6668 12 14.6668C11.0266 14.6668 10.18 14.1468 9.71997 13.3735C9.4733 12.9735 9.33331 12.5002 9.33331 12.0002C9.33331 11.1602 9.71998 10.4068 10.3333 9.92017C10.7933 9.5535 11.3733 9.3335 12 9.3335C13.4733 9.3335 14.6666 10.5268 14.6666 12.0002Z" stroke="#E200E6" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10.96 12L11.62 12.66L13.04 11.3467" stroke="#E200E6" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>,
-                        iconBgColor: "bg-[#95A3C7]"
+                        iconBgColor: "bg-[#FF525238]"
                     }}
-               
+
                 />
 
 
                 <StatsCard
                     bgColor="bg-[#23432E]"
-                    value="+7"
+                    value="10"
                     headerProps={{
-                        title: "New Today",
+                        title: "KYC Pending",
                         icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M5.33333 10.6666H10.1755C13.1672 10.6666 13.6222 8.78715 14.174 6.04597C14.3332 5.25533 14.4128 4.86001 14.2214 4.59663C14.03 4.33325 13.6631 4.33325 12.9294 4.33325H12.6667M4 4.33325H5" stroke="#377A7D" stroke-width="1.2" stroke-linecap="round" />
                             <path d="M7 4.66667C7 4.66667 7.66667 4.66667 8.33333 6C8.33333 6 10.451 2.66667 12.3333 2" stroke="#377A7D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
@@ -57,7 +57,7 @@ export default function UserCard() {
                         </svg>,
                         iconBgColor: "bg-[#A3C2C3]"
                     }}
-                  
+
                 />
 
 
@@ -69,7 +69,7 @@ export default function UserCard() {
                         icon: <Radio size={18} className="text-[#FD7562]" />,
                         iconBgColor: "bg-[#FFC0C0]"
                     }}
-                
+
                 />
 
             </div>
