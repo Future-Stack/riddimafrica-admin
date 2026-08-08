@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, CheckCircle2, Circle, CircleX } from "lucide-react";
+import { CheckCircle2, Circle, CircleX } from "lucide-react";
 
 export type OrderStatus =
     | "New"

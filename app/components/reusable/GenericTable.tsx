@@ -44,7 +44,7 @@ export default function GenericTable<T>({
 
             {/* Table Wrapper (Responsive Overflow Container) */}
             <div className="w-full overflow-x-auto border border-[#EEF2FF]  rounded-lg " style={{ borderColor }}>
-                <table className="w-full text-left border-collapse  table-auto min-w-[1100px]">
+                <table className="w-full text-left border-collapse  table-auto min-w-[1200px]">
 
                     {/* Header Line */}
                     <thead>

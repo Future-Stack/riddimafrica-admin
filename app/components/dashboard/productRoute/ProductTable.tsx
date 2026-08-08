@@ -5,6 +5,8 @@ import PageHeader from "../../reusable/PageHeader";
 import { ProductReviewModal, ProductReviewData, ProductInspectionState, ProductVariantRow } from "./ProductReviewModal";
 import { ProductReviewItem, UserReviewsData, UserReviewsModal } from "./UserReviewsModal";
 import { AddProductModal, NewProductPayload } from "./AddproductModal";
+import { CategoryTab } from "./CategoryTab";
+import { CollectionTab } from "./CollectionTab";
 
 
 type ProductStatus = "Pending Inspection" | "Review" | "Rejected" | "Published" | "Scheduled" | "On-Hold";
@@ -522,10 +524,10 @@ export function ProductTable() {
                 ))}
             </div>
 
-            {activeTab === "category" || activeTab === "collections" ? (
-                <div className="bg-white border border-gray-100 rounded-xl p-10 text-center text-sm text-gray-400">
-                    {activeTab === "category" ? "Product Category" : "Collections"} view design coming soon.
-                </div>
+            {activeTab === "category" ? (
+                <CategoryTab />
+            ) : activeTab === "collections" ? (
+                <CollectionTab/>
             ) : (
                 <GenericTable
                     data={paginatedProducts}
