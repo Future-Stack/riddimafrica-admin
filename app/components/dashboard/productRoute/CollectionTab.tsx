@@ -60,7 +60,7 @@ export function CollectionTab() {
                 </p>
                 <button
                     onClick={handleOpenAdd}
-                    className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#3C182F] text-white text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#904238] text-white text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
                 >
                     + Create Collection
                 </button>
