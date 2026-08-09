@@ -47,7 +47,7 @@ export default function SupportTicketsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#faf8f5]">
+        <div className="min-h-screen ">
             {activeTicket ? (
                 <SupportChatView
                     activeTicket={activeTicket}
