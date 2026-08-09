@@ -83,41 +83,41 @@ export function OrderDetailsModal({
                 {/* Left Column: Business Info */}
                 <div className="md:col-span-2">
                     <h3 className="text-base md:text-lg font-medium text-[#3c182f] leading-6 mb-3">Business Info</h3>
-                    <div className="bg-[#F9F5EF] p-6 rounded-xl space-y-3 text-xs sm:text-sm">
+                    <div className="bg-[#F9F5EF] p-6 rounded-xl space-y-3 text-sm">
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Items</span>
-                            <span className="font-bold text-gray-900">{order.items}</span>
+                            <span className="text-gray-800 text-sm font-normal leading-5">Items</span>
+                            <span className="font-medium text-black text-sm leading-5">{order.items}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Seller/Artist</span>
-                            <span className="font-bold text-teal-600">{order.seller}</span>
+                            <span className="text-gray-800 text-sm font-normal leading-5">Seller/Artist</span>
+                            <span className="font-medium text-[#275759] text-sm leading-5">{order.seller}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Amount</span>
-                            <span className="font-bold text-emerald-600">
+                            <span className="text-gray-800 text-sm font-normal leading-5">Amount</span>
+                            <span className="font-medium text-[#3BB515] text-sm leading-5">
                                 UGX {order.amount.toLocaleString()}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Total Sales</span>
-                            <span className="font-bold text-gray-900">{order.totalSales}</span>
+                            <span className="text-gray-800 text-sm font-normal leading-5">Total Sales</span>
+                            <span className="font-medium text-black text-sm leading-5">{order.totalSales}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Delivery Address</span>
-                            <span className="font-bold text-gray-900">{order.location}</span>
+                            <span className="text-gray-800 text-sm font-normal leading-5">Delivery Address</span>
+                            <span className="font-medium text-black text-sm leading-5">{order.location}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Last Updated</span>
-                            <span className="font-bold text-gray-900">{order.lastUpdated}</span>
+                            <span className="text-gray-800 text-sm font-normal leading-5">Last Updated</span>
+                            <span className="font-medium text-black text-sm leading-5">{order.lastUpdated}</span>
                         </div>
                     </div>
 
                     {/* Status Control */}
                     <div className="mt-6">
-                        <label className="block text-xs font-bold text-gray-500 mb-1">
+                        <label className="block text-sm font-medium text-[#787A7F] leading-5 mb-1.5">
                             Order Status
                         </label>
-                        <div className="w-full p-3 rounded-lg border border-teal-500 bg-teal-50/50 text-xs sm:text-sm font-bold text-gray-800">
+                        <div className="w-full py-2 px-3 rounded-md border border-[#5F9597] bg-[#EBF2F2] text-sm sm:text-base font-medium text-gray-800 mb-6">
                             {order.status}
                         </div>
 
@@ -125,7 +125,7 @@ export function OrderDetailsModal({
                         {nextStatus && order.status !== "Cancelled" && (
                             <button
                                 onClick={() => onUpdateStatus(order.orderId, nextStatus)}
-                                className="mt-3 w-full bg-[#3c182f] text-white py-2.5 px-4 rounded-lg font-bold text-xs hover:bg-[#2e1224] transition-colors cursor-pointer"
+                                className="mt-3 mb-6  bg-[#63274D] text-white py-2.5 px-8 rounded-md font-bold text-sm hover:bg-[#4a1c3a] transition-colors cursor-pointer"
                             >
                                 {nextStatus}
                             </button>
@@ -134,15 +134,26 @@ export function OrderDetailsModal({
 
                     {/* Bottom Actions */}
                     <div className="flex items-center gap-3 mt-6">
-                        <button className="flex-1 bg-[#eab308] text-white font-bold py-2.5 rounded-lg text-xs hover:bg-yellow-600 cursor-pointer">
+                        <button className=" bg-[#E6A400] text-white font-medium py-2.5 px-7 rounded-md text-sm hover:bg-yellow-600 cursor-pointer">
                             Contact Seller
                         </button>
                         {order.status !== "Cancelled" && (
                             <button
                                 onClick={() => onUpdateStatus(order.orderId, "Cancelled")}
-                                className="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg text-xs hover:bg-red-700 cursor-pointer"
+                                className=" bg-[#E60004] text-white font-medium py-2.5 px-7 rounded-lg text-sm hover:bg-red-700 cursor-pointer"
                             >
                                 Cancel Order
+                            </button>
+                        )}
+                        {order.status === "Dispatched" && (
+                            <button
+                                onClick={() => {
+                                    
+                                    console.log("Refund order:", order.orderId);
+                                }}
+                                className="bg-[#326F72] text-white font-medium py-2.5 px-7 rounded-lg text-sm hover:bg-[#1e4445] cursor-pointer"
+                            >
+                                Refund
                             </button>
                         )}
                     </div>
@@ -224,9 +235,9 @@ export function OrderDetailsModal({
 
                                     {/* Label */}
                                     <span
-                                        className={`text-xs font-bold ${isCompleted
+                                        className={`font-medium text-black text-sm leading-5 ${isCompleted
                                                 ? "text-gray-900"
-                                                : "text-gray-400"
+                                                : "text-gray-900"
                                             }`}
                                     >
                                         {item.label}
