@@ -242,26 +242,36 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Top Performing Products + secondary Revenue by Category widget */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
-                <TopPerformingProductsSection products={TOP_PRODUCTS} />
-                <RankedBarChart
-                    title="Revenue by Category"
-                    subtitle="Sales distribution across product types"
-                    items={REVENUE_BY_CATEGORY}
-                    defaultColor="#2D6365"
-                    footer={
-                        <div className="space-y-2 mt-3">
-                            {["Burna Boy", "Burna Boy", "Burna Boy", "Burna Boy"].map((name, i) => (
-                                <div key={i} className="flex items-center justify-between bg-[#F3E9DC] rounded-lg px-3 py-2 text-xs">
-                                    <span className="font-medium text-[#101828]">{name}</span>
-                                    <span className="text-[#787A7F]">
-                                        {50 + i * 4} orders · <span className="font-semibold text-[#101828]">UGX {(4.76 + i * 0.3).toFixed(1)}M</span>
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    }
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch mb-5">
+                <div className="lg:col-span-4 h-full">
+                    <TopPerformingProductsSection products={TOP_PRODUCTS} />
+                </div>
+
+                <div className="lg:col-span-2 h-full">
+                    <RankedBarChart
+                        title="Revenue by Category"
+                        subtitle="Sales distribution across product types"
+                        items={REVENUE_BY_CATEGORY}
+                        defaultColor="#327071"
+                        footer={
+                            <div className="space-y-2 mt-3">
+                                {["Burna Boy", "Burna Boy", "Burna Boy", "Burna Boy"].map((name, i) => (
+                                    <div key={i} className="flex items-center justify-between bg-[#6E5A40] rounded-lg px-3 py-2 text-xs">
+                                        <span className="flex items-center gap-2">
+                                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#E6A40033] text-[#E6A400] text-[10px] font-bold shrink-0">
+                                                {i + 1}
+                                            </span>
+                                            <span className="font-medium text-[#E6E8EB] text-sm leading-5">{name}</span>
+                                        </span>
+                                        <span className="text-[#FAF7F3] text-xs font-medium leading-5">
+                                            {50 + i * 4} orders  <span className="font-semibold text-[#E6A400] pl-2">UGX {(4.76 + i * 0.3).toFixed(1)}M</span>
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        }
+                    />
+                </div>
             </div>
         </div>
     );
