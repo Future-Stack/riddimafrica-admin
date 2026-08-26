@@ -1,12 +1,11 @@
 "use client";
 
-
-import { UserManagementSection } from "@/app/components/dashboard/userRoute/UserManagment";
+import { UserManagementSection } from "@/app/features/users/component/UserManagment";
 
 export default function UsersPage() {
-   return (
-        <div className=""> 
-          <UserManagementSection/>
-        </div>
-    );
+  return (
+    <div className="">
+      <UserManagementSection />
+    </div>
+  );
 }

@@ -1,14 +1,11 @@
 "use client";
 
-import { OrdersTable } from "@/app/components/dashboard/orderRoute/OrderTable";
-
-
-
+import { OrdersTable } from "@/app/features/orders/components/OrderTable";
 
 export default function OrderPage() {
-   return (
-        <div className=""> 
-        <OrdersTable/>
-          </div>
-    );
+  return (
+    <div className="">
+      <OrdersTable />
+    </div>
+  );
 }

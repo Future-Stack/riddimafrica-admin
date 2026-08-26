@@ -3,10 +3,22 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --title-color: #3D2513;
-  --description-color: #624D3B;
+
+  --title-color: #3d2513;
+  --description-color: #624d3b;
 }
 
+/* Satoshi font */
+@theme {
+  --font-satoshi: var(--font-satoshi);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-title: var(--title-color);
+  --color-description: var(--description-color);
+}
+
+/* Custom utility classes */
 .titleColor {
   color: var(--title-color);
 }
@@ -15,25 +27,13 @@
   color: var(--description-color);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  min-height: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-satoshi), sans-serif;
 }
-
-.font-inter {
-  font-family: "Inter", sans-serif;
-}
-
-.font-fraunces {
-  font-family: "Fraunces", serif;
-}
-
