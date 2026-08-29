@@ -1,4 +1,4 @@
-import { ModalShell } from "@/app/components/reusable/ModalSeel";
+import { ModalShell } from "@/app/components/common/ModalSeel";
 
 export interface MerchProduct {
   id: number;
@@ -28,7 +28,7 @@ const SummaryStat: React.FC<{ label: string; value: string | number }> = ({
   value,
 }) => (
   <div className="">
-    <p className="text-sm font-medium leading-6 text-gray-700 mb-6">{label}</p>
+    <p className="text-sm font-medium leading-6 text-gray mb-6">{label}</p>
     <p className="text-lg font-medium font-inter  text-black leading-7">
       {value}
     </p>

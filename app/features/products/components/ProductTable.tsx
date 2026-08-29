@@ -1,5 +1,7 @@
-import GenericTable, { Column } from "@/app/components/reusable/GenericTable";
-import PageHeader from "@/app/components/reusable/PageHeader";
+"use client";
+
+import GenericTable, { Column } from "@/app/components/common/GenericTable";
+import PageHeader from "@/app/components/common/PageHeader";
 import { MoreVertical, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AddProductModal, NewProductPayload } from "./AddproductModal";
@@ -841,7 +843,7 @@ export function ProductTable() {
                       }}
                       className={`px-3 py-1 rounded-full text-xs border cursor-pointer ${
                         sellerFilter === s
-                          ? "bg-[#3E2413] text-white border-[#0a192f]"
+                          ? "bg-offYellow text-white border-[#0a192f]"
                           : "bg-white text-gray-500 border-gray-200"
                       }`}
                     >
@@ -863,7 +865,7 @@ export function ProductTable() {
                       }}
                       className={`px-3 py-1 rounded-full text-xs border cursor-pointer ${
                         categoryFilter === c
-                          ? "bg-[#3E2413] text-white border-[#0a192f]"
+                          ? "bg-offYellow text-white border-[#0a192f]"
                           : "bg-white text-gray-500 border-gray-200"
                       }`}
                     >

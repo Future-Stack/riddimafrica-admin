@@ -1,8 +1,8 @@
 "use client";
 
-import GenericTable, { Column } from "@/app/components/reusable/GenericTable";
-import PageHeader from "@/app/components/reusable/PageHeader";
-import { StatsCard } from "@/app/components/reusable/StatsCard";
+import GenericTable, { Column } from "@/app/components/common/GenericTable";
+import PageHeader from "@/app/components/common/PageHeader";
+import { StatsCard } from "@/app/components/common/StatsCard";
 import {
   CategoryRevenueItem,
   CategoryRevenueList,
@@ -152,7 +152,7 @@ const statusBadgeClass = (status: PayoutStatus) => {
   }
 };
 
-export default function RevenueManagementPage() {
+export default function RevenueManagement() {
   const [payouts, setPayouts] = useState<PayoutRow[]>(INITIAL_PAYOUTS);
   const [activeTab, setActiveTab] = useState<PayoutTabKey>("queue");
   const [currentPage, setCurrentPage] = useState(1);

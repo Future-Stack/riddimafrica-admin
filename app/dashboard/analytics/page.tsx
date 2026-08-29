@@ -1,6 +1,6 @@
 "use client";
-import PageHeader from "@/app/components/reusable/PageHeader";
-import { StatsCard } from "@/app/components/reusable/StatsCard";
+import PageHeader from "@/app/components/common/PageHeader";
+import { StatsCard } from "@/app/components/common/StatsCard";
 import { AnalyticsFilterBar } from "@/app/features/dashboard/components/AnalyticsFilterBar";
 import DonutSplitChart from "@/app/features/dashboard/components/DonitSpiltChart";
 import { FunnelBars } from "@/app/features/dashboard/components/FunnelBars";

@@ -1,4 +1,4 @@
-import { StatsCard } from "@/app/components/reusable/StatsCard";
+import { StatsCard } from "@/app/components/common/StatsCard";
 import { Radio } from "lucide-react";
 
 export default function UserCard() {

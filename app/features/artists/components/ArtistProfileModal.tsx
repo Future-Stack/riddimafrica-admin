@@ -1,4 +1,4 @@
-import { ModalShell } from "@/app/components/reusable/ModalSeel";
+import { ModalShell } from "@/app/components/common/ModalSeel";
 import { useState } from "react";
 
 export interface ArtistProfileData {
@@ -158,7 +158,7 @@ export function ArtistProfileModal({
           {artist.verificationStatus}
         </span>
       </div>
-      <p className="text-sm sm:text-base font-medium font-inter text-gray-700 leading-4 mb-3">
+      <p className="text-sm sm:text-base font-medium font-inter text-gray leading-4 mb-3">
         {artist.bio}
       </p>
 
@@ -173,7 +173,7 @@ export function ArtistProfileModal({
       </div>
 
       <div className="mb-13">
-        <p className="text-sm sm:text-base font-medium font-inter text-gray-700 leading-4 mb-3">
+        <p className="text-sm sm:text-base font-medium font-inter text-gray leading-4 mb-3">
           Merchandise Items
         </p>
         <div className="flex flex-wrap gap-2">

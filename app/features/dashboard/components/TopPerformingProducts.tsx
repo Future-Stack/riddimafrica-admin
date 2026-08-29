@@ -1,4 +1,4 @@
-import GenericTable, { Column } from "@/app/components/reusable/GenericTable";
+import GenericTable, { Column } from "@/app/components/common/GenericTable";
 
 export interface TopProductRow {
   id: number;

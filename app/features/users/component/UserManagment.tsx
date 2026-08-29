@@ -1,7 +1,9 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import GenericTable, { Column } from "@/app/components/reusable/GenericTable";
-import PageHeader from "@/app/components/reusable/PageHeader";
+import GenericTable, { Column } from "@/app/components/common/GenericTable";
+import PageHeader from "@/app/components/common/PageHeader";
 import { Ban, Search } from "lucide-react";
 
 import { SuspendReasonModal } from "./SuspendResonModal";

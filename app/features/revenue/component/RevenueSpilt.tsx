@@ -1,3 +1,5 @@
+"use client";
+
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 export interface RevenueSplitSlice {

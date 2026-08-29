@@ -1,4 +1,4 @@
-import { ModalShell } from "@/app/components/reusable/ModalSeel";
+import { ModalShell } from "@/app/components/common/ModalSeel";
 import { Calendar, ChevronDown, Clock, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -97,7 +97,7 @@ function LocationDropdown({
               className={`w-full text-left px-3 py-2.5 text-sm cursor-pointer hover:bg-[#EBF2F2] ${
                 opt.id === value
                   ? "bg-[#EBF2F2] font-medium text-[#101828]"
-                  : "text-gray-700"
+                  : "text-gray"
               }`}
             >
               {opt.label}

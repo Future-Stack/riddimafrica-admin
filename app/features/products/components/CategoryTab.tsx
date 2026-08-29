@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { CategoryCard, CategoryCardData } from "./CetegoryCard";
 import { CategoryFormModal, CategoryFormValues } from "./CategoryModal";

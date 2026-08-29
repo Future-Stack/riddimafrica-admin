@@ -1,9 +1,11 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Search } from "lucide-react";
 
-import GenericTable, { Column } from "@/app/components/reusable/GenericTable";
-import PageHeader from "@/app/components/reusable/PageHeader";
+import GenericTable, { Column } from "@/app/components/common/GenericTable";
+import PageHeader from "@/app/components/common/PageHeader";
 import ArtistCard from "./ArtistCard";
 import {
   ArtistMerchData,

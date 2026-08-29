@@ -1,7 +1,5 @@
-import AuthLayout from "./components/auth/AuthLayout";
-import LoginForm from "./components/auth/LoginForm";
-
-
+import AuthLayout from "./dashboard/auth/components/AuthLayout";
+import LoginForm from "./dashboard/auth/components/LoginForm";
 
 export default function LoginPage() {
   return (

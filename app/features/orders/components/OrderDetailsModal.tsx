@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalShell } from "@/app/components/reusable/ModalSeel";
+import { ModalShell } from "@/app/components/common/ModalSeel";
 
 export type OrderStatus =
   | "New"
