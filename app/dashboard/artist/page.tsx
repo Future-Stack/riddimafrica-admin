@@ -1,9 +1,11 @@
 import { ArtistTable } from "@/app/features/artists/components/ArtistTable";
 
-export default function ArtistPage() {
+const ArtistPage = () => {
   return (
     <div className="">
       <ArtistTable />
     </div>
   );
-}
+};
+
+export default ArtistPage;

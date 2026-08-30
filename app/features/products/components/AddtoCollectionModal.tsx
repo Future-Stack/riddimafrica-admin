@@ -1,4 +1,5 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
+import CommonButton from "@/app/components/common/button/CommonButton";
+import ModalShell from "@/app/components/common/ModalSeel";
 import { useState } from "react";
 
 export interface CollectionOption {
@@ -22,13 +23,13 @@ const DEFAULT_COLLECTIONS: CollectionOption[] = [
   { id: "limited-addition", name: "Limited Addition", productCount: 3 },
 ];
 
-export function AddToCollectionModal({
+export const AddToCollectionModal = ({
   isOpen,
   productName,
   collections = DEFAULT_COLLECTIONS,
   onClose,
   onSave,
-}: AddToCollectionModalProps) {
+}: AddToCollectionModalProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleClose = () => {
@@ -76,21 +77,23 @@ export function AddToCollectionModal({
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4 w-full">
+        <CommonButton
           onClick={handleSave}
+          variant="primary"
+          className="w-full!"
           disabled={!selectedId}
-          className="rounded-lg bg-[#E6A400] py-2.5 px-6 text-sm font-semibold text-white hover:bg-[#dd951b] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Save
-        </button>
-        <button
+        </CommonButton>
+        <CommonButton
           onClick={handleClose}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 px-6 text-sm font-medium text-[#101828] hover:bg-gray-50 transition-colors cursor-pointer"
+          variant="cancel"
+          className="w-full!"
         >
           Cancel
-        </button>
+        </CommonButton>
       </div>
     </ModalShell>
   );
-}
+};

@@ -1,8 +1,12 @@
 "use client";
 
+import ActionButton from "@/app/components/common/button/ActionButton";
+import CommonSelect from "@/app/components/common/button/CommonSelect";
+import FilterPanel from "@/app/components/common/button/FilterPanel";
+import StatusBadge from "@/app/components/common/button/StatusBadge";
 import GenericTable, { Column } from "@/app/components/common/GenericTable";
-import PageHeader from "@/app/components/common/PageHeader";
-import { MoreVertical, Search } from "lucide-react";
+import DashboardTopSection from "@/app/components/common/header/DashboardTopSection";
+import { Eye, MoreVertical, Star } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AddProductModal, NewProductPayload } from "./AddproductModal";
 import { CategoryTab } from "./CategoryTab";
@@ -296,7 +300,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "collections", label: "Collections" },
 ];
 
-export function ProductTable() {
+export const ProductTable = () => {
   const [activeTab, setActiveTab] = useState<TabKey>("sample");
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductData[]>(INITIAL_PRODUCTS);
@@ -328,12 +332,11 @@ export function ProductTable() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
-      ) {
-        setFilterOpen(false);
-      }
+      const target = event.target as HTMLElement | null;
+      if (filterRef.current?.contains(target)) return;
+      if (target?.closest("[data-slot='select-content']")) return;
+      if (target?.closest("[data-slot='select-item']")) return;
+      setFilterOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -395,23 +398,6 @@ export function ProductTable() {
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE,
   );
-
-  const statusBadgeClass = (status: ProductStatus) => {
-    switch (status) {
-      case "Pending Inspection":
-        return "bg-[#E6A400] text-white";
-      case "Review":
-        return "bg-[#63274D] text-white";
-      case "Rejected":
-        return "bg-[#C9000A] text-white";
-      case "Published":
-        return "bg-[#2D6365] text-white";
-      case "Scheduled":
-        return "bg-[#15AC51] text-white";
-      case "On-Hold":
-        return "bg-[#E6C200] text-white";
-    }
-  };
 
   const handleSchedule = (id: number) => {
     setProducts((prev) =>
@@ -631,11 +617,10 @@ export function ProductTable() {
       header: "Status",
       key: "status",
       render: (row) => (
-        <span
-          className={`inline-flex items-center justify-center px-5 py-2 text-xs font-medium font-inter leading-4 rounded-full ${statusBadgeClass(row.status)}`}
-        >
-          {row.status}
-        </span>
+        <StatusBadge
+          status={row.status}
+          className="mx-auto justify-center px-5"
+        />
       ),
     },
     {
@@ -664,28 +649,7 @@ export function ProductTable() {
                   }}
                   className="w-full text-left px-3 py-2 text-base font-inter leading-5 flex items-center gap-2  cursor-pointer"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                  >
-                    <path
-                      d="M10.3866 7.99995C10.3866 9.31995 9.31995 10.3866 7.99995 10.3866C6.67995 10.3866 5.61328 9.31995 5.61328 7.99995C5.61328 6.67995 6.67995 5.61328 7.99995 5.61328C9.31995 5.61328 10.3866 6.67995 10.3866 7.99995Z"
-                      stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7.9999 13.5133C10.3532 13.5133 12.5466 12.1266 14.0732 9.72665C14.6732 8.78665 14.6732 7.20665 14.0732 6.26665C12.5466 3.86665 10.3532 2.47998 7.9999 2.47998C5.64656 2.47998 3.45323 3.86665 1.92656 6.26665C1.32656 7.20665 1.32656 8.78665 1.92656 9.72665C3.45323 12.1266 5.64656 13.5133 7.9999 13.5133Z"
-                      stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <Eye size={16} strokeWidth={1.5} />
                   View Product
                 </button>
                 <button
@@ -695,188 +659,67 @@ export function ProductTable() {
                   }}
                   className="w-full text-left px-3 py-2 text-base flex items-center gap-2 leading-5 font-inter  cursor-pointer"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                  >
-                    <path
-                      d="M9.15192 2.29628L10.3251 4.66208C10.4851 4.99141 10.9117 5.3073 11.2717 5.36779L13.3981 5.724C14.758 5.95251 15.0779 6.94722 14.098 7.92849L12.4449 9.5953C12.1649 9.87759 12.0116 10.422 12.0983 10.8118L12.5715 12.8752C12.9448 14.5084 12.0849 15.1401 10.6518 14.2866L8.65864 13.097C8.29868 12.8819 7.70541 12.8819 7.33879 13.097L5.34567 14.2866C3.91917 15.1401 3.05259 14.5016 3.42589 12.8752L3.89917 10.8118C3.98582 10.422 3.83251 9.87759 3.55254 9.5953L1.89939 7.92849C0.926163 6.94722 1.23946 5.95251 2.59931 5.724L4.72574 5.36779C5.07904 5.3073 5.50566 4.99141 5.66564 4.66208L6.83884 2.29628C7.47877 1.01257 8.51866 1.01257 9.15192 2.29628Z"
-                      stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <Star size={16} strokeWidth={1.5} />
                   Product Reviews
                 </button>
               </div>
             )}
           </div>
         ) : (
-          <button
-            className="text-gray-400 hover:text-black cursor-pointer"
+          <ActionButton
+            type="view"
             onClick={() => setReviewTarget(row)}
-            aria-label={`View ${row.productName}`}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M15.58 11.9999C15.58 13.9799 13.98 15.5799 12 15.5799C10.02 15.5799 8.42004 13.9799 8.42004 11.9999C8.42004 10.0199 10.02 8.41992 12 8.41992C13.98 8.41992 15.58 10.0199 15.58 11.9999Z"
-                stroke="#655042"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M12 20.2697C15.53 20.2697 18.82 18.1897 21.11 14.5897C22.01 13.1797 22.01 10.8097 21.11 9.39973C18.82 5.79973 15.53 3.71973 12 3.71973C8.46997 3.71973 5.17997 5.79973 2.88997 9.39973C1.98997 10.8097 1.98997 13.1797 2.88997 14.5897C5.17997 18.1897 8.46997 20.2697 12 20.2697Z"
-                stroke="#655042"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
+          />
         ),
     },
   ];
 
   return (
-    <div className="">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
-        <PageHeader
+    <div className="space-y-6">
+      <div className="">
+        <DashboardTopSection
           title="Product Management"
           description="Review submissions, upload professional photos, and publish to the catalogue"
-        />
-
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#897766]"
-            />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1);
-              }}
-              placeholder="Search products or sellers..."
-              className="pl-9 pr-4 py-3.5 rounded-full bg-white border border-[#E8DCC8] text-sm text-[#897766] w-64 focus:outline-none focus:ring-2 focus:ring-[#c19a56]/30"
-            />
-          </div>
-
-          <div ref={filterRef} className="relative">
-            <button
-              onClick={() => setFilterOpen((v) => !v)}
-              className="flex items-center gap-2 px-4 py-3.5 rounded-full bg-[#D8CBB880] border border-gray-200 text-sm font-medium text-[#897766] cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M3 7H6"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+          searchPlaceholder="Search products or sellers..."
+          searchValue={searchQuery}
+          onSearchChange={(value) => {
+            setSearchQuery(value);
+            setCurrentPage(1);
+          }}
+          showFilter
+          onFilterClick={() => setFilterOpen((v) => !v)}
+          filterRef={filterRef}
+          actionLabel="Add Product"
+          onActionClick={() => setAddOpen(true)}
+          filterContent={
+            filterOpen ? (
+              <FilterPanel>
+                <CommonSelect
+                  fullWidth
+                  value={sellerFilter}
+                  item={sellerOptions.map((seller) => ({
+                    label: seller === "All" ? "All Sellers" : seller,
+                    value: seller,
+                  }))}
+                  placeholder="All Sellers"
+                  onValueChange={(value) => {
+                    setSellerFilter(value);
+                    setCurrentPage(1);
+                  }}
                 />
-                <path
-                  d="M3 17H9"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <CommonSelect
+                  fullWidth
+                  value={categoryFilter}
+                  item={categoryOptions.map((category) => ({
+                    label: category === "All" ? "All Categories" : category,
+                    value: category,
+                  }))}
+                  placeholder="All Categories"
+                  onValueChange={(value) => {
+                    setCategoryFilter(value);
+                    setCurrentPage(1);
+                  }}
                 />
-                <path
-                  d="M18 17L21 17"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M15 7L21 7"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                />
-                <path
-                  d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z"
-                  stroke="#897766"
-                  stroke-width="1.5"
-                />
-              </svg>
-              Filter
-            </button>
-
-            {filterOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-10">
-                <p className="text-xs font-semibold text-gray-400 mb-2">
-                  Seller / Artist
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {sellerOptions.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setSellerFilter(s);
-                        setCurrentPage(1);
-                      }}
-                      className={`px-3 py-1 rounded-full text-xs border cursor-pointer ${
-                        sellerFilter === s
-                          ? "bg-offYellow text-white border-[#0a192f]"
-                          : "bg-white text-gray-500 border-gray-200"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="text-xs font-semibold text-gray-400 mb-2">
-                  Category
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {categoryOptions.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => {
-                        setCategoryFilter(c);
-                        setCurrentPage(1);
-                      }}
-                      className={`px-3 py-1 rounded-full text-xs border cursor-pointer ${
-                        categoryFilter === c
-                          ? "bg-offYellow text-white border-[#0a192f]"
-                          : "bg-white text-gray-500 border-gray-200"
-                      }`}
-                    >
-                      {c}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="text-xs font-semibold text-gray-400 mb-2">
-                  Date Range
-                </p>
                 <div className="flex items-center gap-2">
                   <input
                     type="date"
@@ -898,20 +741,13 @@ export function ProductTable() {
                     className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#c19a56]/30"
                   />
                 </div>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={() => setAddOpen(true)}
-            className="px-5 py-3.5 rounded-md bg-[#E6A400] text-white text-sm font-medium font-inter hover:bg-[#dd951b] transition-colors cursor-pointer whitespace-nowrap"
-          >
-            + Add Product
-          </button>
-        </div>
+              </FilterPanel>
+            ) : null
+          }
+        />
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2">
         {TABS.map((tab) => (
           <button
             key={tab.key}
@@ -991,4 +827,4 @@ export function ProductTable() {
       />
     </div>
   );
-}
+};

@@ -1,5 +1,8 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
-import { Plus } from "lucide-react";
+import CommonButton from "@/app/components/common/button/CommonButton";
+import CommonHeader from "@/app/components/common/header/CommonHeader";
+import InfoField from "@/app/components/common/header/InfoField";
+import ModalShell from "@/app/components/common/ModalSeel";
+import { CalendarDays, Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import { AddToCollectionModal, CollectionOption } from "./AddtoCollectionModal";
 import { RejectProductModal } from "./RejectProductModal";
@@ -91,7 +94,7 @@ const INSPECTION_ITEMS: {
   },
 ];
 
-export function ProductReviewModal({
+export const ProductReviewModal = ({
   isOpen,
   product,
   onClose,
@@ -101,7 +104,7 @@ export function ProductReviewModal({
   onApproveAndPublish,
   collectionOptions,
   inspectionLocations,
-}: ProductReviewModalProps) {
+}: ProductReviewModalProps) => {
   const [images, setImages] = useState<string[]>(product?.images ?? []);
   const [inspection, setInspection] = useState<ProductInspectionState>(
     product?.inspection ?? {
@@ -122,7 +125,7 @@ export function ProductReviewModal({
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
 
-  if (!isOpen || !product) return null;
+  if (!product) return null;
 
   // sync local state when a new product is opened
   if (loadedForId !== product.id) {
@@ -175,57 +178,43 @@ export function ProductReviewModal({
         maxWidthClassName="max-w-[1152px]"
         roundedClassName="rounded-xl"
       >
-        <div className="bg-[#F9F5EF] rounded-xl py-5.5 px-7 my-4 grid grid-cols-1 md:grid-cols-4 xl:grid-cols-4 gap-2">
-          <div>
-            <p className="text-sm text-gray-600 font-normal leading-5 mb-1">
-              Product Name
-            </p>
-            <p className="text-base font-medium text-black leading-6">
-              {product.productName}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600 font-normal leading-5 mb-1">
-              Seller / Artist
-            </p>
-            <div className="flex items-center gap-1.5">
-              <img
-                src={product.submittedByAvatar}
-                alt={product.submittedByName}
-                className="w-5 h-5 rounded-full object-cover"
-              />
-              <span className="text-sm text-black font-medium leading-5">
-                {product.submittedByName}
-              </span>
-              <span className="text-[10px] bg-[#23BA7D26] text-[#23BA7D] px-3 py-0.5 leading-4 rounded-sm font-medium">
-                {product.submittedByRole}
-              </span>
-            </div>
-          </div>
-          <div className="xl:pl-9">
-            <p className="text-sm text-gray-600 font-normal leading-5 mb-1 ">
-              Description
-            </p>
-            <p className="text-xs text-black font-medium leading-4">
-              {product.description}
-            </p>
-          </div>
-          <div className="sm:text-right">
-            <p className="text-sm text-gray-600 font-normal leading-5 mb-1">
-              Listed Price
-            </p>
-            <p className="text-base md:text-lg font-medium leading-7 text-[#E6A400]">
-              UGX {product.listedPriceUGX.toLocaleString()}
-            </p>
-          </div>
+        <div className="bg-[#F9F5EF] rounded-xl py-5.5 px-7 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <InfoField label="Product Name" value={product.productName} />
+          <InfoField
+            label="Seller / Artist"
+            value={
+              <div className="flex items-center gap-1.5">
+                <img
+                  src={product.submittedByAvatar}
+                  alt={product.submittedByName}
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+                <span className="text-sm text-[#3E2723] font-medium leading-5">
+                  {product.submittedByName}
+                </span>
+                <span className="text-[10px] bg-[#23BA7D26] text-[#23BA7D] px-3 py-0.5 leading-4 rounded-sm font-medium">
+                  {product.submittedByRole}
+                </span>
+              </div>
+            }
+          />
+          <InfoField label="Description" value={product.description} />
+          <InfoField
+            label="Listed Price"
+            value={
+              <CommonHeader size="md" className="text-yellow! font-medium">
+                UGX {product.listedPriceUGX.toLocaleString()}
+              </CommonHeader>
+            }
+          />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 font-inter mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 font-inter">
           <div className="col-span-2">
             <div className="flex flex-col mb-4">
-              <p className="text-sm sm:text-base font-medium text-[#101828] leading-6">
+              <CommonHeader size="md" className="text-[#3E2723]!">
                 Product Images
-              </p>
+              </CommonHeader>
               <span className="text-xs text-[#787A7F] font-normal leading-4">
                 {images.length} images
               </span>
@@ -240,8 +229,9 @@ export function ProductReviewModal({
                 />
               ))}
               <button
+                type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="aspect-square rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:border-[#E6A400] hover:text-[#E6A400] cursor-pointer"
+                className="aspect-square rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:border-[#E6A400] hover:text-yellow cursor-pointer"
               >
                 <Plus size={18} />
                 <span className="text-[10px] mt-1">Add photo</span>
@@ -258,9 +248,9 @@ export function ProductReviewModal({
 
           <div className="col-span-1">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm sm:text-base font-medium text-[#101828] leading-6">
+              <CommonHeader size="md" className="text-[#3E2723]!">
                 Inspection
-              </p>
+              </CommonHeader>
               <span className="text-xs text-[#787A7F] font-normal leading-4">
                 {passedCount}/{INSPECTION_ITEMS.length} passed
               </span>
@@ -296,98 +286,63 @@ export function ProductReviewModal({
 
             {product.inspectionSchedule && (
               <div className="flex items-center gap-2 bg-[#23BA7D0D] border border-[#23BA7D4D] rounded-[8px] px-3 py-2.5 mt-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                >
-                  <path
-                    d="M7.33325 8.6665H10.6666M5.33325 8.6665H5.33924M8.66659 11.3332H5.33325M10.6666 11.3332H10.6606"
-                    stroke="#23BA7D"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M12 1.3335V2.66683M4 1.3335V2.66683"
-                    stroke="#23BA7D"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M1.66675 8.16216C1.66675 5.25729 1.66675 3.80486 2.50149 2.90243C3.33624 2 4.67974 2 7.36675 2H8.63341C11.3204 2 12.6639 2 13.4987 2.90243C14.3334 3.80486 14.3334 5.25729 14.3334 8.16216V8.5045C14.3334 11.4094 14.3334 12.8618 13.4987 13.7642C12.6639 14.6667 11.3204 14.6667 8.63341 14.6667H7.36675C4.67974 14.6667 3.33624 14.6667 2.50149 13.7642C1.66675 12.8618 1.66675 11.4094 1.66675 8.5045V8.16216Z"
-                    stroke="#23BA7D"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M2 5.3335H14"
-                    stroke="#23BA7D"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <p className="text-sm  text-[#23BA7D]">
-                  <span
-                    className="font-medium  cursor-pointer leading-5"
+                <CalendarDays size={16} className="text-[#23BA7D]" />
+                <div className="text-sm text-[#23BA7D]">
+                  <button
+                    type="button"
+                    className="font-medium cursor-pointer leading-5 underline"
                     onClick={() => setScheduleModalOpen(true)}
                   >
                     Inspection Scheduled — Reschedule?
-                  </span>
-                  <br />
+                  </button>
                   <p className="text-[#787A7F] text-xs font-medium leading-4">
                     {product.inspectionSchedule.label} ·{" "}
                     {product.inspectionSchedule.location}
                   </p>
-                </p>
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className="space-y-3 mb-6 border-t border-green-100 ">
+        <div className="space-y-3 border-t border-green-100">
           {variants.map((v, i) => (
             <div key={i} className="grid grid-cols-2 sm:grid-cols-4 mt-4 gap-3">
               <div>
-                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5  ">
+                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5">
                   Colour
                 </p>
                 <input
                   value={v.colour}
                   onChange={(e) => updateVariant(i, "colour", e.target.value)}
-                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597]  px-3 py-4  focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
+                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597] px-3 py-4 focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
                 />
               </div>
               <div>
-                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5  ">
+                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5">
                   Variants
                 </p>
                 <input
                   value={v.variant}
                   onChange={(e) => updateVariant(i, "variant", e.target.value)}
-                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597]  px-3 py-4  focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
+                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597] px-3 py-4 focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
                 />
               </div>
               <div>
-                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5  ">
+                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5">
                   Stock
                 </p>
                 <input
                   value={v.stock}
                   onChange={(e) => updateVariant(i, "stock", e.target.value)}
-                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597]  px-3 py-4  focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
+                  className="w-full rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597] px-3 py-4 focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20"
                 />
               </div>
               <div>
-                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5  ">
+                <p className="text-xs text-[#787A7F] font-medium leading-5 mb-1.5">
                   Final Price
                 </p>
-                <div className="flex items-center rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597]  px-3 py-4  focus:outline-none focus:ring-2 focus:ring-[#036B2C]/20">
+                <div className="flex items-center rounded-lg text-sm text-gray font-medium bg-[#EBF2F2] border border-[#5F9597] px-3 py-4">
                   <span className="mr-1">UGX</span>
                   <input
                     value={v.finalPriceUGX}
@@ -402,33 +357,37 @@ export function ProductReviewModal({
           ))}
         </div>
 
-        <div className="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-3">
-          <button
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center w-full">
+          <CommonButton
             onClick={() => setScheduleModalOpen(true)}
-            className="w-full md:w-auto rounded-lg bg-[#23BA7D] border border-[#23BA7D] py-2 px-4 text-sm font-medium text-white hover:opacity-90 transition-opacity cursor-pointer"
+            variant="secondary"
+            className="w-full! sm:w-auto! bg-[#23BA7D]! hover:bg-[#1ea06c]! border-0!"
           >
             Schedule
-          </button>
-          <button
+          </CommonButton>
+          <CommonButton
             onClick={() => setRejectModalOpen(true)}
-            className="w-full md:w-auto rounded-lg bg-[#D4183D26] border border-[#D4183D26] py-2 px-4 text-sm font-medium text-[#FF6467] hover:bg-[#ffeaea] transition-colors cursor-pointer"
+            variant="danger"
+            className="w-full! sm:w-auto! bg-[#D4183D26]! text-[#FF6467]! hover:bg-[#ffeaea]! border border-[#D4183D26]!"
           >
             Reject with Feedback
-          </button>
-          <button
+          </CommonButton>
+          <CommonButton
             onClick={() => setCollectionModalOpen(true)}
-            className="w-full md:w-auto rounded-lg bg-[#E9DFE6] border border-[#6F2C57] py-2 px-4 text-sm font-medium text-[#64284E] hover:bg-[#e6d9f5] transition-colors cursor-pointer"
+            variant="secondary"
+            className="w-full! sm:w-auto! bg-[#E9DFE6]! text-[#64284E]! hover:bg-[#e6d9f5]! border border-[#6F2C57]!"
           >
             Add to Collection
-          </button>
-          <button
+          </CommonButton>
+          <CommonButton
             onClick={() =>
               onApproveAndPublish(product.id, { images, inspection, variants })
             }
-            className="w-full md:w-auto ml-auto rounded-[8px] bg-[#E6A400] py-2 px-6 text-sm font-semibold text-white hover:bg-[#dd951b] transition-colors cursor-pointer"
+            variant="primary"
+            className="w-full! sm:w-auto! sm:ml-auto"
           >
             Approve &amp; Publish
-          </button>
+          </CommonButton>
         </div>
       </ModalShell>
 
@@ -466,4 +425,4 @@ export function ProductReviewModal({
       />
     </>
   );
-}
+};

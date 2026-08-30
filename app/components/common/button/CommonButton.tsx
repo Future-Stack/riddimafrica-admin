@@ -25,8 +25,8 @@ const VARIANT_STYLE = {
   primary:
     "text-white bg-gradient-to-br from-[#E6A400] to-[#E6B652] shadow-[0_8px_24px_0_rgba(187,72,61,0.25)]",
   cancel:
-    "bg-[#F4F6F8] shadow-[0_8px_24px_0_rgba(244,210,66,0.20)] border border-br text-[#637381] hover:bg-[#F4F6F8]/80",
-  outline: "text-primary-green border-2 border-primary-green hover:bg-green-50",
+    "bg-[#F9FAFB] border border-[#C4CDD5] text-[#454F5B] hover:bg-[#F4F6F8]/80",
+  danger: "bg-[#D4183D] text-white hover:bg-[#D4183D]/80",
   outlineBlue: "text-[#155DFC] border-2 border-[#155DFC] hover:bg-[#155DFC]/10",
   destructive: "bg-red-500 text-white shadow-sm hover:opacity-90",
   secondary: "bg-[#6A7282] text-white hover:bg-[#6A7282]/90",

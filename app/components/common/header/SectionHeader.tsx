@@ -6,7 +6,17 @@ interface SectionHeaderProps {
   className?: string;
   desClassName?: string;
   size?: "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
-  desSize?: "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
+  desSize?:
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | "6xl";
 
   direction?: "col" | "col-reverse";
 }

@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     "Discover the latest African music, artists, entertainment, and culture with Riddim Africa.",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en" className={satoshi.variable}>
       <body className="min-h-full flex flex-col font-satoshi antialiased">
@@ -28,4 +28,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

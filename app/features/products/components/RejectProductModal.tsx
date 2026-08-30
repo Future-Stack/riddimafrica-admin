@@ -1,4 +1,5 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
+import CommonButton from "@/app/components/common/button/CommonButton";
+import ModalShell from "@/app/components/common/ModalSeel";
 import { useState } from "react";
 
 interface RejectProductModalProps {
@@ -8,47 +9,39 @@ interface RejectProductModalProps {
   onConfirm: (feedback: string) => void;
 }
 
-export function RejectProductModal({
+export const RejectProductModal = ({
   isOpen,
   productName,
   onClose,
   onConfirm,
-}: RejectProductModalProps) {
+}: RejectProductModalProps) => {
   const [feedback, setFeedback] = useState("");
-  const [loadedForOpen, setLoadedForOpen] = useState(false);
 
-  // reset the textarea each time the modal is (re)opened
-  if (isOpen && !loadedForOpen) {
-    setLoadedForOpen(true);
-    setFeedback("");
-  } else if (!isOpen && loadedForOpen) {
-    setLoadedForOpen(false);
-  }
+  if (!isOpen) return null;
 
   const canReject = feedback.trim().length > 0;
 
   const handleConfirm = () => {
     if (!canReject) return;
     onConfirm(feedback.trim());
+    setFeedback("");
+  };
+
+  const handleClose = () => {
+    setFeedback("");
+    onClose();
   };
 
   return (
     <ModalShell
       isOpen={isOpen}
-      onClose={onClose}
-      maxWidthClassName="max-w-[420px]"
+      onClose={handleClose}
+      title={`Are you sure you want to reject${productName ? ` "${productName}"` : " the product"}?`}
+      maxWidthClassName="max-w-md"
       roundedClassName="rounded-2xl"
-      header={
-        <div className="flex-1 pl-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#101828] leading-7 text-center">
-            Are you sure you want to reject
-            {productName ? ` "${productName}"` : " the product"}?
-          </h2>
-        </div>
-      }
     >
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[#787A7F] leading-5">
+        <label className="mb-2 block text-sm font-medium text-[#3E2723]">
           Reason
         </label>
         <textarea
@@ -56,25 +49,27 @@ export function RejectProductModal({
           onChange={(e) => setFeedback(e.target.value)}
           rows={4}
           placeholder="Explain what needs to change..."
-          className="w-full resize-none rounded-lg border border-[#FFA8A9] bg-[#FF00041A] p-3 text-sm text-[#DB321C] placeholder-[#DB321C]/60 focus:outline-none focus:ring-2 focus:ring-red-100"
+          className="w-full resize-none rounded-lg bg-[#FF0004]/10 border border-[#FFA8A9] text-[#DB321C] p-2 placeholder-[#DB321C]/60"
         />
       </div>
 
-      <div className="flex items-center gap-3 mt-6">
-        <button
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4 w-full">
+        <CommonButton
           onClick={handleConfirm}
+          variant="danger"
+          className="w-full!"
           disabled={!canReject}
-          className="rounded-lg bg-[#D4183D] py-2.5 px-6 text-sm font-semibold text-white hover:bg-[#B5122F] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Reject Product
-        </button>
-        <button
-          onClick={onClose}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 px-6 text-sm font-medium text-[#101828] hover:bg-gray-50 transition-colors cursor-pointer"
+        </CommonButton>
+        <CommonButton
+          onClick={handleClose}
+          variant="cancel"
+          className="w-full!"
         >
           Cancel
-        </button>
+        </CommonButton>
       </div>
     </ModalShell>
   );
-}
+};

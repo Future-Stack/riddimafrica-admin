@@ -5,11 +5,11 @@ import { useState, type ReactNode } from "react";
 import DashboardHeader from "./Dashboardheader";
 import Sidebar from "./Sidebar";
 
-export default function DashboardShell({
+const DashboardShell = ({
   children,
 }: {
   children: ReactNode;
-}) {
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -22,4 +22,6 @@ export default function DashboardShell({
       </div>
     </div>
   );
-}
+};
+
+export default DashboardShell;

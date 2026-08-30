@@ -16,7 +16,7 @@ const INITIAL_COLLECTIONS: CollectionCardData[] = [
     { id: 4, name: "Limited Edition", active: true, productAvatars: [AVATAR_1, AVATAR_2], productCount: 3 },
 ];
 
-export function CollectionTab() {
+export const CollectionTab = () => {
     const [collections, setCollections] = useState<CollectionCardData[]>(INITIAL_COLLECTIONS);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<"add" | "edit">("add");
@@ -99,4 +99,4 @@ export function CollectionTab() {
             />
         </div>
     );
-}
+};

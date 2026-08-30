@@ -1,24 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaRegChartBar, FaUsers } from "react-icons/fa";
+import { GiMicrophone } from "react-icons/gi";
+import { IoBagHandleOutline } from "react-icons/io5";
+import { MdSupportAgent } from "react-icons/md";
+import { PiPackageBold, PiRadioThin, PiShoppingCart } from "react-icons/pi";
+import { RiSettingsLine } from "react-icons/ri";
+import { TbArrowDownFromArc, TbMoneybag } from "react-icons/tb";
 import LogoutModal from "./LogoutModal";
-import {
-  AnalyticsIcon,
-  ArtistsIcon,
-  DashboardIcon,
-  LogoutIcon,
-  OrderIcon,
-  ProductsIcon,
-  RadioIcon,
-  RevenueIcon,
-  SellersIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "./SidebarIcon";
+
+import { CiGrid42 } from "react-icons/ci";
 
 interface NavItem {
   label: string;
@@ -31,33 +26,80 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
 }
 
-export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [logout, setLogout] = useState();
 
   const menuItems: NavItem[] = [
-    { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    { label: "User Management", icon: <UsersIcon />, path: "/dashboard/users" },
-    { label: "Artists", icon: <ArtistsIcon />, path: "/dashboard/artist" },
-    { label: "Sellers", icon: <SellersIcon />, path: "/dashboard/sellers" },
-    { label: "Products", icon: <ProductsIcon />, path: "/dashboard/products" },
-    { label: "Orders", icon: <OrderIcon />, path: "/dashboard/orders" },
-    { label: "Radio", icon: <RadioIcon />, path: "/dashboard/radio" },
-    { label: "Revenue", icon: <RevenueIcon />, path: "/dashboard/revenue" },
+    { label: "Dashboard", icon: <CiGrid42 />, path: "/dashboard" },
+    { label: "User Management", icon: <FaUsers />, path: "/dashboard/users" },
+    { label: "Artists", icon: <GiMicrophone />, path: "/dashboard/artist" },
+    {
+      label: "Sellers",
+      icon: <IoBagHandleOutline />,
+      path: "/dashboard/sellers",
+    },
+    { label: "Products", icon: <PiPackageBold />, path: "/dashboard/products" },
+    { label: "Orders", icon: <PiShoppingCart />, path: "/dashboard/orders" },
+    { label: "Radio", icon: <PiRadioThin />, path: "/dashboard/radio" },
+    { label: "Revenue", icon: <TbMoneybag />, path: "/dashboard/revenue" },
     {
       label: "Analytics",
-      icon: <AnalyticsIcon />,
+      icon: <FaRegChartBar />,
       path: "/dashboard/analytics",
     },
-    { label: "Support", icon: <AnalyticsIcon />, path: "/dashboard/support" },
+    {
+      label: "Support",
+      icon: <MdSupportAgent />,
+      path: "/dashboard/support",
+    },
+  ];
+
+  const bottomItems: NavItem[] = [
+    {
+      label: "Settings",
+      icon: <RiSettingsLine />,
+      path: "/dashboard/settings",
+    },
   ];
 
   const handleLogout = async () => {
     try {
       router.replace("/site/login");
-    } catch (error: any) {}
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const renderNavLink = (item: NavItem) => {
+    const active =
+      item.path === "/dashboard"
+        ? pathname === "/dashboard"
+        : pathname.startsWith(item.path);
+
+    return (
+      <li key={item.label}>
+        <Link
+          href={item.path}
+          onClick={() => setSidebarOpen(false)}
+          className={`flex items-center gap-2 px-4 py-3 text-base rounded-lg transition-all duration-200 group ${
+            active
+              ? "bg-[#63542C] text-white font-bold"
+              : "text-white hover:bg-white/5 hover:text-white"
+          }`}
+        >
+          <span
+            className={
+              active ? "text-white" : "text-white group-hover:text-white"
+            }
+          >
+            {item.icon}
+          </span>
+          <span className="text-sm tracking-wide">{item.label}</span>
+        </Link>
+      </li>
+    );
   };
   return (
     <>
@@ -91,71 +133,20 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
         </div>
 
         <nav className="flex-1 flex flex-col px-4">
-          <ul className="space-y-2">
-            {menuItems.map((item) => {
-              // Exact match or partial match for paths (e.g., /dashboard/users/...)
-              const active =
-                item.path === "/dashboard"
-                  ? pathname === "/dashboard"
-                  : pathname.startsWith(item.path);
-
-              return (
-                <li key={item.label}>
-                  <Link
-                    href={item.path}
-                    onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-4 px-4 py-3 text-base rounded-lg transition-all duration-200 group ${
-                      active
-                        ? "bg-[#63542C] text-white font-bold [#C9A96C]"
-                        : "text-white hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    <span
-                      className={
-                        active
-                          ? "text-white"
-                          : "text-white group-hover:text-white"
-                      }
-                    >
-                      {item.icon}
-                    </span>
-                    <span className="text-sm tracking-wide">{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <ul className="space-y-2">{menuItems.map(renderNavLink)}</ul>
 
           <ul className="space-y-2 mt-auto pb-6 pt-8">
-            {/* Settings — normal nav link */}
-            <li>
-              <Link
-                href="/dashboard/settings"
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 group ${
-                  pathname.startsWith("/dashboard/settings")
-                    ? "bg-[#C9A96C99] text-white font-bold border-l-4 border-[#C9A96C]"
-                    : "text-white hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <span className="text-white group-hover:text-white">
-                  <SettingsIcon />
-                </span>
-                <span className="text-sm tracking-wide">Settings</span>
-              </Link>
-            </li>
-
-            {/* Log Out — opens confirmation modal instead of navigating */}
+            {bottomItems.map(renderNavLink)}
             <li>
               <button
                 type="button"
                 onClick={() => setIsLogoutModalOpen(true)}
-                className="w-full flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 group text-white hover:bg-white/5 cursor-pointer hover:text-white"
+                className="w-full flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 group text-white cursor-pointer hover:text-white"
               >
-                <span className="text-white group-hover:text-white">
-                  <LogoutIcon />
+                <span className="text-white text-2xl rotate-90 ">
+                  <TbArrowDownFromArc />
                 </span>
-                <span className="text-sm tracking-wide text-red-500">
+                <span className="text-sm tracking-wide text-white">
                   Log Out
                 </span>
               </button>
@@ -171,4 +162,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       />
     </>
   );
-}
+};
+
+export default Sidebar;

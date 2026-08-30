@@ -22,7 +22,7 @@ export interface StatCardProps {
  * Reusable dark stat card — used for revenue/product summary metrics.
  * Pass a solid `bgClassName` per card to get the mixed color-block look.
  */
-export function StatCard({
+export const StatCard = ({
     title,
     value,
     subtitle,
@@ -30,7 +30,7 @@ export function StatCard({
     icon,
     bgClassName,
     iconBgClassName = "bg-white/15",
-}: StatCardProps) {
+}: StatCardProps) => {
     return (
         <div className={`rounded-2xl p-5 ${bgClassName} relative overflow-hidden`}>
             <div className="flex items-start justify-between mb-6">
@@ -56,4 +56,4 @@ export function StatCard({
             </div>
         </div>
     );
-}
+};

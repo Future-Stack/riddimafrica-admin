@@ -40,7 +40,7 @@ const VerifyOtpForm = ({
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = String(secondsLeft % 60).padStart(2, "0");
 
-  function updateDigit(index: number, value: string) {
+  const updateDigit = (index: number, value: string) => {
     const char = value.replace(/[^0-9]/g, "").slice(-1);
     setDigits((prev) => {
       const next = [...prev];
@@ -50,15 +50,15 @@ const VerifyOtpForm = ({
     if (char && index < OTP_LENGTH - 1) {
       inputRefs.current[index + 1]?.focus();
     }
-  }
+  };
 
-  function handleKeyDown(index: number, e: KeyboardEvent<HTMLInputElement>) {
+  const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  }
+  };
 
-  function handlePaste(e: ClipboardEvent<HTMLInputElement>) {
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     const pasted = e.clipboardData.getData("text").replace(/[^0-9]/g, "");
     if (!pasted) return;
     e.preventDefault();
@@ -70,9 +70,9 @@ const VerifyOtpForm = ({
     setDigits(next);
     const lastIndex = Math.min(pasted.length, OTP_LENGTH) - 1;
     inputRefs.current[Math.max(lastIndex, 0)]?.focus();
-  }
+  };
 
-  async function handleVerify(e: FormEvent) {
+  const handleVerify = async (e: FormEvent) => {
     e.preventDefault();
     const code = digits.join("");
     if (code.length < OTP_LENGTH) {
@@ -89,7 +89,7 @@ const VerifyOtpForm = ({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className=" w-full h-full flex flex-col justify-center gap-6 ">

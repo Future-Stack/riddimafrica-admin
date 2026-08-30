@@ -1,3 +1,4 @@
+import CommonHeader from "@/app/components/common/header/CommonHeader";
 import { MiniStatRow } from "./MiniStachip";
 
 export interface CityOrder {
@@ -13,22 +14,22 @@ interface OrdersByCitySectionProps {
   deliveryRate: string;
 }
 
-export default function OrdersByCitySection({
+const OrdersByCitySection = ({
   cities,
   topCity,
   avgOrderUGX,
   deliveryRate,
-}: OrdersByCitySectionProps) {
+}: OrdersByCitySectionProps) => {
   const maxOrders = Math.max(1, ...cities.map((c) => c.orders));
 
   return (
     <div className="bg-[#FAF7F3] rounded-xl border border-[#C4CDD566] font-inter p-5">
-      <h3 className="text-base md:text-lg font-medium text-[#101828] font-inter leading-7">
+      <CommonHeader size="lg" className="text-[#101828]!">
         Orders by City
-      </h3>
-      <p className="text-xs text-[#624D3B] font-medium leading-4 mt-0.5 mb-5">
+      </CommonHeader>
+      <CommonHeader size="xs" className="text-[#624D3B]! mb-5">
         Geographic distribution of orders
-      </p>
+      </CommonHeader>
 
       <div className="space-y-3">
         {cities.map((c) => (
@@ -63,4 +64,6 @@ export default function OrdersByCitySection({
       />
     </div>
   );
-}
+};
+
+export default OrdersByCitySection;
