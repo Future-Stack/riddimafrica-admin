@@ -1,12 +1,11 @@
-"use client";
+import { UserManagementSection } from "@/app/features/users/component/UserManagment";
 
+const UsersPage = () => {
+  return (
+    <div className="">
+      <UserManagementSection />
+    </div>
+  );
+};
 
-import { UserManagementSection } from "@/app/components/dashboard/userRoute/UserManagment";
-
-export default function UsersPage() {
-   return (
-        <div className=""> 
-          <UserManagementSection/>
-        </div>
-    );
-}
+export default UsersPage;

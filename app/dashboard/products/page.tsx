@@ -1,11 +1,11 @@
-"use client";
+import { ProductTable } from "@/app/features/products/components/ProductTable";
 
-import { ProductTable } from "@/app/components/dashboard/productRoute/ProductTable";
+const ProductsPage = () => {
+  return (
+    <div className="">
+      <ProductTable />
+    </div>
+  );
+};
 
-export default function ProductsPage() {
-   return (
-        <div className=""> 
-         <ProductTable/>
-        </div>
-    );
-}
+export default ProductsPage;

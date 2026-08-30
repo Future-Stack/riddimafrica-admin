@@ -1,10 +1,11 @@
-"use client";
+import { SellerTable } from "@/app/features/sellers/component/SellerTable";
 
-import { SellerTable } from "@/app/components/dashboard/SellerRoute/SellerTable";
-export default function SellersPage() {
-   return (
-        <div className=""> 
-          <SellerTable/>
-        </div>
-    );
-}
+const SellersPage = () => {
+  return (
+    <div className="">
+      <SellerTable />
+    </div>
+  );
+};
+
+export default SellersPage;
