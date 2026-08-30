@@ -1,4 +1,5 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
+import CommonButton from "@/app/components/common/button/CommonButton";
+import ModalShell from "@/app/components/common/ModalSeel";
 import { Calendar, ChevronDown, Clock, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -29,7 +30,7 @@ const DEFAULT_LOCATIONS: InspectionLocationOption[] = [
   { id: "downtown-markets", label: "Downtown Markets" },
 ];
 
-function formatDisplayDate(dateStr: string) {
+const formatDisplayDate = (dateStr: string) => {
   if (!dateStr) return "";
   const d = new Date(`${dateStr}T00:00:00`);
   if (Number.isNaN(d.getTime())) return "";
@@ -39,9 +40,9 @@ function formatDisplayDate(dateStr: string) {
     month: "long",
     year: "numeric",
   });
-}
+};
 
-function LocationDropdown({
+const LocationDropdown = ({
   value,
   onChange,
   options,
@@ -49,19 +50,19 @@ function LocationDropdown({
   value: string;
   onChange: (id: string) => void;
   options: InspectionLocationOption[];
-}) {
+}) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleOutsideClick(e: MouseEvent) {
+    const handleOutsideClick = (e: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
         setOpen(false);
       }
-    }
+    };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
@@ -107,16 +108,16 @@ function LocationDropdown({
       )}
     </div>
   );
-}
+};
 
-export function ScheduleInspectionModal({
+export const ScheduleInspectionModal = ({
   isOpen,
   productName,
   sellerName,
   locations = DEFAULT_LOCATIONS,
   onClose,
   onConfirm,
-}: ScheduleInspectionModalProps) {
+}: ScheduleInspectionModalProps) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [locationId, setLocationId] = useState("");
@@ -218,7 +219,7 @@ export function ScheduleInspectionModal({
 
       {(displayDate || selectedLocation) && (
         <div className="bg-[#E5B54F1A] border border-[#E5B54F4D] rounded-[8px] px-4 py-3 mb-6">
-          <p className="flex items-center gap-1.5 text-sm font-medium text-[#E6A400] mb-1.5">
+          <p className="flex items-center gap-1.5 text-sm font-medium text-yellow mb-1.5">
             <Calendar size={14} />
             Appointment Summary
           </p>
@@ -237,21 +238,23 @@ export function ScheduleInspectionModal({
         </div>
       )}
 
-      <div className="flex items-center gap-3">
-        <button
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4 w-full">
+        <CommonButton
           onClick={handleConfirm}
+          variant="primary"
+          className="w-full!"
           disabled={!canConfirm}
-          className="rounded-lg bg-[#E6A400] py-2.5 px-6 text-sm font-semibold text-white hover:bg-[#dd951b] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Confirm Schedule
-        </button>
-        <button
+        </CommonButton>
+        <CommonButton
           onClick={resetAndClose}
-          className="rounded-lg border border-gray-300 bg-white py-2.5 px-6 text-sm font-medium text-[#101828] hover:bg-gray-50 transition-colors cursor-pointer"
+          variant="cancel"
+          className="w-full!"
         >
           Cancel
-        </button>
+        </CommonButton>
       </div>
     </ModalShell>
   );
-}
+};

@@ -5,12 +5,23 @@ type HeaderTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
 interface CommonHeaderProps {
   children: ReactNode;
   className?: string;
-  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
+  size?:
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | "6xl";
 
   as?: HeaderTag;
 }
 
 const sizeStyle = {
+  xs: "text-xs sm:text-sm leading-snug",
   sm: "text-xs sm:text-sm leading-normal",
   md: "text-sm sm:text-base leading-normal",
   lg: "text-base sm:text-lg leading-snug",
@@ -23,6 +34,7 @@ const sizeStyle = {
 };
 // Default semantic tag per size, only used when `as` isn't passed.
 const defaultTag: Record<keyof typeof sizeStyle, HeaderTag> = {
+  xs: "p",
   sm: "p",
   md: "h4",
   lg: "h3",
@@ -35,7 +47,8 @@ const defaultTag: Record<keyof typeof sizeStyle, HeaderTag> = {
 };
 
 const textStyle: Record<keyof typeof sizeStyle, string> = {
-  sm: "text-gray font-normal",
+  xs: "text-[#787A7F] font-normal",
+  sm: "text-[#6A7282] font-normal",
   md: "text-gray font-normal",
   lg: "text-[#112518] font-semibold",
   xl: "text-[#112518] font-bold",

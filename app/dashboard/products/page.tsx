@@ -1,9 +1,11 @@
 import { ProductTable } from "@/app/features/products/components/ProductTable";
 
-export default function ProductsPage() {
+const ProductsPage = () => {
   return (
     <div className="">
       <ProductTable />
     </div>
   );
-}
+};
+
+export default ProductsPage;

@@ -1,5 +1,7 @@
 import RadioManagement from "@/app/features/radio/components/RadioManagement";
 
-export default function RadioPage() {
+const RadioPage = () => {
   return <RadioManagement />;
-}
+};
+
+export default RadioPage;

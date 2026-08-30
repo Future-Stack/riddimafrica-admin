@@ -23,7 +23,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
         </button>
 
         {/* Title */}
-        <h1 className="text-white text-xl md:text-[28px] hidden md:block font-bold tracking-wide">
+        <h1 className="text-white text-lg sm:text-2xl md:text-[28px] hidden md:block font-bold md:tracking-wide">
           Welcome Back !
         </h1>
       </div>
@@ -31,7 +31,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
       {/* Right Side */}
       <div className="flex items-center gap-3 md:gap-5">
         {/* Search */}
-        <div className="relative hidden md:block w-64 lg:w-80">
+        <div className="relative hidden xl:block w-64 xl:w-80 ">
           <input
             type="text"
             placeholder="Search ..."

@@ -1,4 +1,4 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
+import ModalShell from "@/app/components/common/ModalSeel";
 import { EyeOff, Star, Trash2 } from "lucide-react";
 
 export interface ProductReviewItem {
@@ -29,13 +29,13 @@ interface UserReviewsModalProps {
   onDeleteReview: (reviewId: number) => void;
 }
 
-export function UserReviewsModal({
+export const UserReviewsModal = ({
   isOpen,
   data,
   onClose,
   onHideReview,
   onDeleteReview,
-}: UserReviewsModalProps) {
+}: UserReviewsModalProps) => {
   if (!isOpen || !data) return null;
 
   const maxCount = Math.max(1, ...data.breakdown.map((b) => b.count));
@@ -63,7 +63,7 @@ export function UserReviewsModal({
                 size={16}
                 className={
                   i <= Math.round(data.averageRating)
-                    ? "text-[#E6A400] fill-[#E6A400]"
+                    ? "text-yellow fill-[#E6A400]"
                     : "text-gray-300"
                 }
               />
@@ -79,7 +79,7 @@ export function UserReviewsModal({
             <div key={b.star} className="flex items-center gap-2">
               <span className="text-xs text-gray-600 w-6 flex items-center gap-0.5">
                 {b.star}{" "}
-                <Star size={10} className="text-[#E6A400] fill-[#E6A400]" />
+                <Star size={10} className="text-yellow fill-[#E6A400]" />
               </span>
               <div className="flex-1 h-2 rounded-full bg-gray-600 overflow-hidden">
                 <div
@@ -120,7 +120,7 @@ export function UserReviewsModal({
                           size={12}
                           className={
                             i <= review.rating
-                              ? "text-[#E6A400] fill-[#E6A400]"
+                              ? "text-yellow fill-[#E6A400]"
                               : "text-gray-300"
                           }
                         />
@@ -168,4 +168,4 @@ export function UserReviewsModal({
       </div>
     </ModalShell>
   );
-}
+};

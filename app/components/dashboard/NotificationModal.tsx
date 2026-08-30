@@ -50,10 +50,10 @@ const typeStyles = {
   success: "bg-emerald-400",
 };
 
-export default function NotificationModal({
+const NotificationModal = ({
   open,
   onClose,
-}: NotificationModalProps) {
+}: NotificationModalProps) => {
   const [notifications, setNotifications] =
     React.useState(initialNotifications);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -192,4 +192,7 @@ export default function NotificationModal({
       </ul>
     </div>
   );
-}
+};
+
+
+export default NotificationModal;

@@ -1,11 +1,11 @@
 "use client";
 
-import { SupportChatView } from "@/app/features/settings/component/SupportChatView";
-import { SupportTicketsTable } from "@/app/features/settings/component/SupportTicketTable";
+import { SupportChatView } from "@/app/features/support/components/SupportChatView";
+import { SupportTicketsTable } from "@/app/features/support/components/SupportTicketTable";
 import { INITIAL_TICKETS, Ticket, TicketStatus } from "@/app/types/supportType";
 import { useState } from "react";
 
-export default function SupportTicketsView() {
+const SupportTicketsView = () => {
   const [tickets, setTickets] = useState<Ticket[]>(INITIAL_TICKETS);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
 
@@ -57,7 +57,7 @@ export default function SupportTicketsView() {
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="space-y-6">
       {activeTicket ? (
         <SupportChatView
           activeTicket={activeTicket}
@@ -75,4 +75,6 @@ export default function SupportTicketsView() {
       )}
     </div>
   );
-}
+};
+
+export default SupportTicketsView;

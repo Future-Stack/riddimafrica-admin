@@ -1,6 +1,11 @@
 "use client";
 
+import StatusBadge from "@/app/components/common/button/StatusBadge";
+import ViewButton from "@/app/components/common/button/ViewButton";
 import GenericTable, { Column } from "../../common/GenericTable";
+import CardContainer from "../../common/card/CardContainer";
+import CardSectionHeader from "../../common/header/CardSectionHeader";
+import CommonHeader from "../../common/header/CommonHeader";
 
 interface OrderData {
   orderId: string;
@@ -10,7 +15,7 @@ interface OrderData {
   status: "Packaging" | "Delivered" | "Cancelled" | "New" | "Shipped";
 }
 
-export function RecentOrdersSection() {
+export const RecentOrdersSection = () => {
   const orders: OrderData[] = [
     {
       orderId: "ORD-3941",
@@ -85,9 +90,9 @@ export function RecentOrdersSection() {
       header: "Order ID",
       key: "orderId",
       render: (row) => (
-        <span className="text-[#E6A400] text-sm sm:text-base font-medium leading-5">
+        <CommonHeader className="text-yellow" size="md">
           {row.orderId}
-        </span>
+        </CommonHeader>
       ),
     },
     {
@@ -97,12 +102,12 @@ export function RecentOrdersSection() {
         <div className="flex items-center gap-3">
           <img src="/Container.svg" />
           <div>
-            <p className="font-medium text-sm sm:text-base text-[#101828] leading-5 font-inter mb-1">
+            <CommonHeader className="text-[#101828]" size="md">
               {row.customer.name}
-            </p>
-            <p className="text-xs sm:text-sm text-[#6A7282] font-normal font-inter leading-5">
+            </CommonHeader>
+            <CommonHeader className="" size="sm">
               {row.customer.email}
-            </p>
+            </CommonHeader>
           </div>
         </div>
       ),
@@ -110,56 +115,42 @@ export function RecentOrdersSection() {
     {
       header: "Product",
       key: "product",
-      render: (row) => row.product,
+      render: (row) => (
+        <CommonHeader className="text-[#3D2513]!" size="md">
+          {row.product}
+        </CommonHeader>
+      ),
     },
     {
       header: "Amount",
       key: "amount",
-      render: (row) => row.amount,
+      render: (row) => (
+        <CommonHeader className="text-[#3D2513]!" size="md">
+          {row.amount}
+        </CommonHeader>
+      ),
     },
     {
       header: "Status",
       key: "status",
-      render: (row) => {
-        const badgeColors: Record<string, string> = {
-          Packaging: "bg-[#B75432] text-white",
-          Delivered: "bg-[#008471] text-white",
-          Cancelled: "bg-[#C9000A] text-white",
-          New: "bg-[#052787] text-white",
-          Shipped: "bg-[#6D2B55] text-white",
-        };
-        return (
-          <span
-            className={`px-3 py-2 text-xs font-bold rounded-full ${badgeColors[row.status]}`}
-          >
-            {row.status}
-          </span>
-        );
-      },
+      render: (row) => <StatusBadge status={row.status} />,
     },
     {
       header: "Action",
       key: "action",
       className: "text-center",
-      render: () => (
-        <button className="text-[#E6A400] text-xs hover:underline font-bold cursor-pointer">
-          View
-        </button>
-      ),
+      render: () => <ViewButton onClick={() => {}} text="View" />,
     },
   ];
 
   return (
-    <div className=" bg-[#FAF7F3] rounded-xl border border-[#E4E6E7] h-full">
-      <div className="flex justify-between items-center  px-5 pt-5">
-        <h2 className="text-base sm:text-lg font-medium leaidng-7 text-titleColor font-inter">
-          Recent Orders
-        </h2>
-        <button className="text-[#E6A400] text-xs font-medium hover:underline cursor-pointer">
-          View all →
-        </button>
+    <CardContainer className="h-full flex flex-col">
+      <div className="flex justify-between items-center">
+        <CardSectionHeader title="Recent Orders" />
+
+        <ViewButton onClick={() => {}} text="View all" isIcon />
       </div>
       <GenericTable data={orders} columns={columns} />
-    </div>
+    </CardContainer>
   );
-}
+};

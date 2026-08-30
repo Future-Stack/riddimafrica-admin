@@ -18,7 +18,7 @@ const ResetPasswordForm = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  async function handleSubmit(e: FormEvent) {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
@@ -30,7 +30,7 @@ const ResetPasswordForm = () => {
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className=" w-full h-full flex flex-col justify-center gap-6 ">

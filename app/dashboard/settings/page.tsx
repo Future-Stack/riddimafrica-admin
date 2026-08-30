@@ -1,5 +1,7 @@
-import SupportTicketsView from "@/app/features/settings/component/SupportTicketsView";
+import AdminSettings from "@/app/features/settings/component/AdminSettings";
 
-export default function SupportTicketsPage() {
-  return <SupportTicketsView />;
-}
+const SettingsPage = () => {
+  return <AdminSettings />;
+};
+
+export default SettingsPage;

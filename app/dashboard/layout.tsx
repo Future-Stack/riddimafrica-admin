@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import DashboardShell from "../components/dashboard/DashboardShell";
-
-export default function DashboardLayout({
-  children,
-}: {
+interface DashboardLayoutProps {
   children: ReactNode;
-}) {
-  return <DashboardShell>{children}</DashboardShell>;
 }
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+  return <DashboardShell>{children}</DashboardShell>;
+};
+
+export default DashboardLayout;

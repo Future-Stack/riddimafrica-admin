@@ -1,5 +1,6 @@
 "use client";
 
+import CommonButton from "@/app/components/common/button/CommonButton";
 import {
   Music2,
   Pause,
@@ -29,7 +30,7 @@ interface RadioPlayerCardProps {
   onRestart: () => void;
 }
 
-export function RadioPlayerCard({
+export const RadioPlayerCard = ({
   track,
   isPlaying,
   onTogglePlay,
@@ -39,7 +40,7 @@ export function RadioPlayerCard({
   onVolumeChange,
   onPauseStream,
   onRestart,
-}: RadioPlayerCardProps) {
+}: RadioPlayerCardProps) => {
   return (
     <div className="bg-offYellow rounded-2xl p-6 font-inter text-white h-full">
       <div className="flex items-center gap-3 mb-5">
@@ -71,6 +72,7 @@ export function RadioPlayerCard({
       {/* Playback controls */}
       <div className="flex items-center justify-center gap-6 mb-5">
         <button
+          type="button"
           onClick={onPrev}
           className="text-white/70 hover:text-white cursor-pointer"
           aria-label="Previous track"
@@ -78,6 +80,7 @@ export function RadioPlayerCard({
           <SkipBack size={18} />
         </button>
         <button
+          type="button"
           onClick={onTogglePlay}
           className="w-11 h-11 rounded-full bg-[#E6A400] flex items-center justify-center text-white hover:bg-[#dd951b] transition-colors cursor-pointer"
           aria-label={isPlaying ? "Pause" : "Play"}
@@ -89,6 +92,7 @@ export function RadioPlayerCard({
           )}
         </button>
         <button
+          type="button"
           onClick={onNext}
           className="text-white/70 hover:text-white cursor-pointer"
           aria-label="Next track"
@@ -117,19 +121,25 @@ export function RadioPlayerCard({
           {volumePercent}%
         </span>
 
-        <button
+        <CommonButton
+          size="sm"
+          variant="danger"
+          shape="rounded"
           onClick={onPauseStream}
-          className="rounded-lg bg-[#5A1F1F] border border-[#DB321C66] px-3.5 py-1.5 text-xs font-semibold text-[#FF6467] hover:bg-[#6B2424] transition-colors cursor-pointer whitespace-nowrap"
+          className="whitespace-nowrap shrink-0"
         >
           Pause Stream
-        </button>
-        <button
+        </CommonButton>
+        <CommonButton
+          size="sm"
+          variant="primary"
+          shape="rounded"
           onClick={onRestart}
-          className="rounded-lg bg-[#E6A400] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#dd951b] transition-colors cursor-pointer whitespace-nowrap"
+          className="whitespace-nowrap shrink-0"
         >
           Restart
-        </button>
+        </CommonButton>
       </div>
     </div>
   );
-}
+};

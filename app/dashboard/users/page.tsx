@@ -1,9 +1,11 @@
 import { UserManagementSection } from "@/app/features/users/component/UserManagment";
 
-export default function UsersPage() {
+const UsersPage = () => {
   return (
     <div className="">
       <UserManagementSection />
     </div>
   );
-}
+};
+
+export default UsersPage;

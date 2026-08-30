@@ -1,4 +1,7 @@
-import { ModalShell } from "@/app/components/common/ModalSeel";
+import CommonButton from "@/app/components/common/button/CommonButton";
+import CustomSwitch from "@/app/components/common/button/CustomSwitch";
+import CommonHeader from "@/app/components/common/header/CommonHeader";
+import ModalShell from "@/app/components/common/ModalSeel";
 import { useState } from "react";
 
 export interface CollectionFormValues {
@@ -21,13 +24,13 @@ const DEFAULT_VALUES: CollectionFormValues = {
   active: true,
 };
 
-export function CollectionFormModal({
+export const CollectionFormModal = ({
   isOpen,
   mode,
   initialValues,
   onClose,
   onSubmit,
-}: CollectionFormModalProps) {
+}: CollectionFormModalProps) => {
   const [values, setValues] = useState<CollectionFormValues>(
     initialValues ?? DEFAULT_VALUES,
   );
@@ -69,34 +72,23 @@ export function CollectionFormModal({
       maxWidthClassName="max-w-[602px]"
       roundedClassName="rounded-2xl"
     >
-      <div className="border-t border-[#C1D6D7] mb-6" />
-
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-base font-medium text-[#101828] leading-6">
+          <CommonHeader size="md" className="text-[#3E2723]!">
             Active
-          </p>
-          <p className="text-xs text-[#787A7F] font-medium leading-4">
+          </CommonHeader>
+          <CommonHeader size="xs" className="text-[#787A7F]!">
             Visible to sellers when listing products
-          </p>
+          </CommonHeader>
         </div>
-        <button
-          onClick={() => setValues((v) => ({ ...v, active: !v.active }))}
-          className={`w-11 h-6 rounded-full relative transition-colors cursor-pointer shrink-0 ${
-            values.active ? "bg-[#E6A400]" : "bg-gray-300"
-          }`}
-          aria-label="Toggle collection active"
-        >
-          <span
-            className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
-              values.active ? "translate-x-5" : ""
-            }`}
-          />
-        </button>
+        <CustomSwitch
+          checked={values.active}
+          onCheckedChange={(active) => setValues((v) => ({ ...v, active }))}
+        />
       </div>
 
-      <div className="mb-4">
-        <label className="mb-1.5 block text-sm font-medium text-[#787A7F] leading-5 ">
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-[#787A7F] leading-5">
           Name *
         </label>
         <input
@@ -107,8 +99,8 @@ export function CollectionFormModal({
         />
       </div>
 
-      <div className="mb-6">
-        <label className="mb-1.5 block text-sm font-medium text-[#787A7F] leading-5 ">
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-[#787A7F] leading-5">
           Description
         </label>
         <textarea
@@ -122,21 +114,23 @@ export function CollectionFormModal({
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4 w-full">
+        <CommonButton
           onClick={handleSubmit}
+          variant="primary"
+          className="w-full!"
           disabled={!canSubmit}
-          className="rounded-lg bg-[#E6A400] py-3 px-7 text-sm font-semibold text-white hover:bg-[#dd951b] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isEdit ? "Save Changes" : "Create Collection"}
-        </button>
-        <button
+        </CommonButton>
+        <CommonButton
           onClick={handleClose}
-          className="rounded-lg bg-[#7C8591] py-3 px-7 text-sm font-medium text-white hover:opacity-90 transition-opacity cursor-pointer"
+          variant="secondary"
+          className="w-full!"
         >
           Cancel
-        </button>
+        </CommonButton>
       </div>
     </ModalShell>
   );
-}
+};

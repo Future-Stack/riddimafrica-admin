@@ -1,6 +1,10 @@
 "use client";
-import PageHeader from "@/app/components/common/PageHeader";
-import { StatsCard } from "@/app/components/common/StatsCard";
+
+import {
+  StatsCardGrid,
+  type StatsCardProps,
+} from "@/app/components/common/card/StatsCard";
+import DashboardTopSection from "@/app/components/common/header/DashboardTopSection";
 import { AnalyticsFilterBar } from "@/app/features/dashboard/components/AnalyticsFilterBar";
 import DonutSplitChart from "@/app/features/dashboard/components/DonitSpiltChart";
 import { FunnelBars } from "@/app/features/dashboard/components/FunnelBars";
@@ -21,8 +25,6 @@ import {
   Wallet,
 } from "lucide-react";
 import { useState } from "react";
-
-// ---- demo data (swap for real API responses when the backend is wired up) ----
 
 const REVENUE_COMMISSION_DATA = [
   { label: "Jan", revenue: 1_100_000, commission: 380_000 },
@@ -175,95 +177,94 @@ const TOP_PRODUCTS: TopProductRow[] = [
 
 const FILTER_RANGES = ["7 days", "30 days", "90 days", "1 year", "Custom"];
 
-export default function AnalyticsPage() {
+const analyticsStats: StatsCardProps[] = [
+  {
+    bgColor: "bg-[#3C182F]",
+    value: "UGX 18.4M",
+    headerProps: {
+      title: "Total Revenue",
+      icon: <Wallet size={16} className="text-amber-400" />,
+      iconBgColor: "bg-[#3A222D]",
+    },
+    footerProps: { description: "↑ 24%" },
+  },
+  {
+    bgColor: "bg-[#558587]",
+    value: "812",
+    headerProps: {
+      title: "Total Orders",
+      icon: <ShoppingBag size={16} className="text-white" />,
+      iconBgColor: "bg-white/15",
+    },
+  },
+  {
+    bgColor: "bg-[#AC3D32]",
+    value: "UGX 4.4M",
+    headerProps: {
+      title: "Commission Earned",
+      icon: <Percent size={16} className="text-pink-200" />,
+      iconBgColor: "bg-white/15",
+    },
+    footerProps: { description: "↑ 24%" },
+  },
+  {
+    bgColor: "bg-[#3C4762]",
+    value: "1,140",
+    headerProps: {
+      title: "Avg. Radio Listeners",
+      icon: <Radio size={16} className="text-white" />,
+      iconBgColor: "bg-white/15",
+    },
+    footerProps: { description: "-6%" },
+  },
+  {
+    bgColor: "bg-[#1E4B2E]",
+    value: "+11",
+    headerProps: {
+      title: "New Sellers/Artists",
+      icon: <UserPlus size={16} className="text-white" />,
+      iconBgColor: "bg-white/15",
+    },
+  },
+  {
+    bgColor: "bg-[#AB6331]",
+    value: "5.8%",
+    headerProps: {
+      title: "Conversion Rate",
+      icon: <TrendingUp size={16} className="text-white" />,
+      iconBgColor: "bg-white/15",
+    },
+  },
+];
+
+const AnalyticsPage = () => {
   const [activeRange, setActiveRange] = useState("30 days");
 
   const handleExport = () => {
-    // Hook this up to the real export/report-generation endpoint.
     console.log(`Exporting analytics for range: ${activeRange}`);
   };
 
   return (
-    <div>
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5">
-        <PageHeader
-          title="Analytics"
-          description="Platform performance across revenue, orders, products, and radio"
-        />
-        <AnalyticsFilterBar
-          ranges={FILTER_RANGES}
-          activeRange={activeRange}
-          onRangeChange={setActiveRange}
-          onExport={handleExport}
-        />
-      </div>
+    <div className="space-y-6">
+      <DashboardTopSection
+        title="Analytics"
+        description="Platform performance across revenue, orders, products, and radio"
+        extra={
+          <AnalyticsFilterBar
+            ranges={FILTER_RANGES}
+            activeRange={activeRange}
+            onRangeChange={setActiveRange}
+            onExport={handleExport}
+          />
+        }
+      />
 
-      {/* 6 top-level stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 mb-5">
-        <StatsCard
-          bgColor="bg-[#3C182F]"
-          value="UGX 18.4M"
-          headerProps={{
-            title: "Total Revenue",
-            icon: <Wallet size={16} className="text-amber-400" />,
-            iconBgColor: "bg-[#3A222D]",
-          }}
-          footerProps={{ description: "↑ 24%" }}
-        />
-        <StatsCard
-          bgColor="bg-[#558587]"
-          value="812"
-          headerProps={{
-            title: "Total Orders",
-            icon: <ShoppingBag size={16} className="text-white" />,
-            iconBgColor: "bg-white/15",
-          }}
-          footerProps={{ description: "" }}
-        />
-        <StatsCard
-          bgColor="bg-[#AC3D32]"
-          value="UGX 4.4M"
-          headerProps={{
-            title: "Commission Earned",
-            icon: <Percent size={16} className="text-pink-200" />,
-            iconBgColor: "bg-white/15",
-          }}
-          footerProps={{ description: "↑ 24%" }}
-        />
-        <StatsCard
-          bgColor="bg-[#3C4762]"
-          value="1,140"
-          headerProps={{
-            title: "Avg. Radio Listeners",
-            icon: <Radio size={16} className="text-white" />,
-            iconBgColor: "bg-white/15",
-          }}
-          footerProps={{ description: "-6%" }}
-        />
-        <StatsCard
-          bgColor="bg-[#1E4B2E]"
-          value="+11"
-          headerProps={{
-            title: "New Sellers/Artists",
-            icon: <UserPlus size={16} className="text-white" />,
-            iconBgColor: "bg-white/15",
-          }}
-          footerProps={{ description: "" }}
-        />
-        <StatsCard
-          bgColor="bg-[#AB6331]"
-          value="5.8%"
-          headerProps={{
-            title: "Conversion Rate",
-            icon: <TrendingUp size={16} className="text-white" />,
-            iconBgColor: "bg-white/15",
-          }}
-          footerProps={{ description: "" }}
-        />
-      </div>
+      <StatsCardGrid
+        items={analyticsStats}
+        className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6"
+      />
 
-      {/* Revenue & Commission + Order Status Split */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
         <RevenueAndCombination
           title="Revenue & Commission"
           subtitle="Revenue vs 35% platform commission over selected period"
@@ -290,8 +291,7 @@ export default function AnalyticsPage() {
         />
       </div>
 
-      {/* Revenue by Category + Orders by City + Purchase Funnel */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <RankedBarChart
           title="Revenue by Category"
           subtitle="Sales distribution across product types"
@@ -312,8 +312,7 @@ export default function AnalyticsPage() {
         />
       </div>
 
-      {/* Platform Growth + Radio Listener Trend */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <RevenueAndCombination
           title="Platform Growth"
           subtitle="Buyers, sellers, and artists over 6 months"
@@ -340,7 +339,7 @@ export default function AnalyticsPage() {
                   label: "Total Buyers",
                   value: "2,960",
                   growth: "+12%",
-                  valueColorClassName: "text-[#E6A400]",
+                  valueColorClassName: "text-yellow",
                 },
                 {
                   label: "Active Sellers",
@@ -377,8 +376,7 @@ export default function AnalyticsPage() {
         />
       </div>
 
-      {/* Top Performing Products + secondary Revenue by Category widget */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 items-stretch">
         <div className="lg:col-span-4 h-full">
           <TopPerformingProductsSection products={TOP_PRODUCTS} />
         </div>
@@ -398,7 +396,7 @@ export default function AnalyticsPage() {
                       className="flex items-center justify-between bg-[#6E5A40] rounded-lg px-3 py-2 text-xs"
                     >
                       <span className="flex items-center gap-2">
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#E6A40033] text-[#E6A400] text-[10px] font-bold shrink-0">
+                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#E6A40033] text-yellow text-[10px] font-bold shrink-0">
                           {i + 1}
                         </span>
                         <span className="font-medium text-[#E6E8EB] text-sm leading-5">
@@ -407,7 +405,7 @@ export default function AnalyticsPage() {
                       </span>
                       <span className="text-[#FAF7F3] text-xs font-medium leading-5">
                         {50 + i * 4} orders{" "}
-                        <span className="font-semibold text-[#E6A400] pl-2">
+                        <span className="font-semibold text-yellow pl-2">
                           UGX {(4.76 + i * 0.3).toFixed(1)}M
                         </span>
                       </span>
@@ -421,4 +419,6 @@ export default function AnalyticsPage() {
       </div>
     </div>
   );
-}
+};
+
+export default AnalyticsPage;
