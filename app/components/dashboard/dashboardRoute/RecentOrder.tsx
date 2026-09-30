@@ -1,87 +1,156 @@
-import Image from "next/image";
-import GenericTable, { Column } from "../../reusable/GenericTable";
+"use client";
 
+import StatusBadge from "@/app/components/common/button/StatusBadge";
+import ViewButton from "@/app/components/common/button/ViewButton";
+import GenericTable, { Column } from "../../common/GenericTable";
+import CardContainer from "../../common/card/CardContainer";
+import CardSectionHeader from "../../common/header/CardSectionHeader";
+import CommonHeader from "../../common/header/CommonHeader";
 
 interface OrderData {
-    orderId: string;
-    customer: { name: string; email: string; avatar: string };
-    product: string;
-    amount: string;
-    status: "Packaging" | "Delivered" | "Cancelled" | "New" | "Shipped";
+  orderId: string;
+  customer: { name: string; email: string; avatar: string };
+  product: string;
+  amount: string;
+  status: "Packaging" | "Delivered" | "Cancelled" | "New" | "Shipped";
 }
 
-export function RecentOrdersSection() {
-    const orders: OrderData[] = [
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Teni Hoodie", amount: "UGX 18,500", status: "Packaging" },
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Burna Vinyl LP", amount: "UGX 18,500", status: "Delivered" },
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Teni Hoodie", amount: "UGX 18,500", status: "Packaging" },
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Burna Vinyl LP", amount: "UGX 18,500", status: "Delivered" },
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Teni Hoodie", amount: "UGX 18,500", status: "Packaging" },
-        { orderId: "ORD-3941", customer: { name: "Sarah Johnson", email: "sarah.j@email.com", avatar: "/avatar.png" }, product: "Burna Vinyl LP", amount: "UGX 18,500", status: "Delivered" },
-    ];
+export const RecentOrdersSection = () => {
+  const orders: OrderData[] = [
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Teni Hoodie",
+      amount: "UGX 18,500",
+      status: "Packaging",
+    },
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Burna Vinyl LP",
+      amount: "UGX 18,500",
+      status: "Delivered",
+    },
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Teni Hoodie",
+      amount: "UGX 18,500",
+      status: "Packaging",
+    },
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Burna Vinyl LP",
+      amount: "UGX 18,500",
+      status: "Delivered",
+    },
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Teni Hoodie",
+      amount: "UGX 18,500",
+      status: "Packaging",
+    },
+    {
+      orderId: "ORD-3941",
+      customer: {
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        avatar: "/avatar.png",
+      },
+      product: "Burna Vinyl LP",
+      amount: "UGX 18,500",
+      status: "Delivered",
+    },
+  ];
 
-    const columns: Column<OrderData>[] = [
-        {
-            header: "Order ID",
-            key: "orderId",
-            render: (row) => <span className="text-[#E6A400] text-sm sm:text-base font-medium leading-5">{row.orderId}</span>
-        },
-        {
-            header: "Customer",
-            key: "customer",
-            render: (row) => (
-                <div className="flex items-center gap-3">
-                    <img src="/Container.svg"  /> 
-                    <div>
-                        <p className="font-medium text-sm sm:text-base text-[#101828] leading-5 font-inter mb-1">{row.customer.name}</p>
-                        <p className="text-xs sm:text-sm text-[#6A7282] font-normal font-inter leading-5">{row.customer.email}</p>
-                    </div>
-                </div>
-            )
-        },
-        {
-            header: "Product",
-            key: "product",
-            render: (row) => row.product,
-        },
-        {
-            header: "Amount",
-            key: "amount",
-            render: (row) => row.amount,
-        },
-        {
-            header: "Status",
-            key: "status",
-            render: (row) => {
-                const badgeColors: Record<string, string> = {
-                    Packaging: "bg-[#B75432] text-white",
-                    Delivered: "bg-[#008471] text-white",
-                    Cancelled: "bg-[#C9000A] text-white",
-                    New: "bg-[#052787] text-white",
-                    Shipped: "bg-[#6D2B55] text-white",
-                };
-                return (
-                    <span className={`px-3 py-2 text-xs font-bold rounded-full ${badgeColors[row.status]}`}>
-                        {row.status}
-                    </span>
-                );
-            }
-        },
-        {
-            header: "Action",
-            key: "action",
-            className: "text-center",
-            render: () => <button className="text-[#E6A400] text-xs hover:underline font-bold cursor-pointer">View</button>
-        }
-    ];
-
-    return (
-        <div className=" bg-[#FAF7F3] rounded-xl border border-[#E4E6E7] h-full">
-            <div className="flex justify-between items-center  px-5 pt-5">
-                <h2 className="text-base sm:text-lg font-medium leaidng-7 text-titleColor font-inter">Recent Orders</h2>
-                <button className="text-[#E6A400] text-xs font-medium hover:underline cursor-pointer">View all →</button>
-            </div>
-            <GenericTable data={orders} columns={columns} />
+  const columns: Column<OrderData>[] = [
+    {
+      header: "Order ID",
+      key: "orderId",
+      render: (row) => (
+        <CommonHeader className="text-yellow" size="md">
+          {row.orderId}
+        </CommonHeader>
+      ),
+    },
+    {
+      header: "Customer",
+      key: "customer",
+      render: (row) => (
+        <div className="flex items-center gap-3">
+          <img src="/Container.svg" />
+          <div>
+            <CommonHeader className="text-[#101828]" size="md">
+              {row.customer.name}
+            </CommonHeader>
+            <CommonHeader className="" size="sm">
+              {row.customer.email}
+            </CommonHeader>
+          </div>
         </div>
-    );
-}
+      ),
+    },
+    {
+      header: "Product",
+      key: "product",
+      render: (row) => (
+        <CommonHeader className="text-[#3D2513]!" size="md">
+          {row.product}
+        </CommonHeader>
+      ),
+    },
+    {
+      header: "Amount",
+      key: "amount",
+      render: (row) => (
+        <CommonHeader className="text-[#3D2513]!" size="md">
+          {row.amount}
+        </CommonHeader>
+      ),
+    },
+    {
+      header: "Status",
+      key: "status",
+      render: (row) => <StatusBadge status={row.status} />,
+    },
+    {
+      header: "Action",
+      key: "action",
+      className: "text-center",
+      render: () => <ViewButton onClick={() => {}} text="View" />,
+    },
+  ];
+
+  return (
+    <CardContainer className="h-full flex flex-col">
+      <div className="flex justify-between items-center">
+        <CardSectionHeader title="Recent Orders" />
+
+        <ViewButton onClick={() => {}} text="View all" isIcon />
+      </div>
+      <GenericTable data={orders} columns={columns} />
+    </CardContainer>
+  );
+};
