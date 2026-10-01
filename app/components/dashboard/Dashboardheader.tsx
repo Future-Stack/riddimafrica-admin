@@ -1,5 +1,7 @@
 "use client";
 
+import { useGetAdminProfileQuery } from "@/store/features/profile/profileAPI";
+import { useAppSelector } from "@/store/hooks";
 import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -12,6 +14,14 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const token = useAppSelector((state) => state.auth.accessToken);
+  const { data } = useGetAdminProfileQuery(undefined, { skip: !token });
+  const profile = data?.data;
+
+  const displayName = profile?.name || "Admin";
+  const displayEmail = profile?.email || "riddim@admin.com";
+  const displayImage = profile?.profileImage || "/Ellipse 6.svg";
+
   return (
     <header className="w-full bg-offYellow rounded-2xl px-6 py-4 flex items-center justify-between shadow-sm h-20">
       <div className="flex items-center gap-4">
@@ -58,25 +68,25 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
         </div>
 
         {/* Profile */}
-        <Link href="/dashboard/settings">
+        <Link href="/dashboard/settings?tab=profile">
           <div className="bg-[#63542C4D] rounded-[8px] p-2 flex items-center gap-3 pr-4 shadow-sm hover:bg-[#63542C] transition-colors cursor-pointer">
             <div className="h-11 w-11 rounded-full overflow-hidden ">
               <img
-                src="/Ellipse 6.svg"
-                alt="User"
+                src={displayImage}
+                alt={displayName}
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
-                    "https://ui-avatars.com/api/?name=Admin&background=0a192f&color=fff";
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0a192f&color=fff`;
                 }}
               />
             </div>
             <div className=" flex flex-col">
               <span className="text-sm font-medium text-white font-inter leading-tight">
-                Admin
+                {displayName}
               </span>
               <span className="text-[13px] text-white font-inter font-normal leading-tight">
-                riddim@admin.com
+                {displayEmail}
               </span>
             </div>
           </div>

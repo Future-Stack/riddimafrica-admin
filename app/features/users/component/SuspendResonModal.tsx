@@ -5,7 +5,7 @@ import React, { useState } from "react";
 interface SuspendReasonModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (reason: string) => void;
+  onConfirm: (reason: string) => void | Promise<void>;
 }
 
 export const SuspendReasonModal: React.FC<SuspendReasonModalProps> = ({
@@ -14,13 +14,20 @@ export const SuspendReasonModal: React.FC<SuspendReasonModalProps> = ({
   onConfirm,
 }) => {
   const [reason, setReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onConfirm(reason);
-    setReason("");
+    if (!reason.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await onConfirm(reason.trim());
+      setReason("");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -49,10 +56,21 @@ export const SuspendReasonModal: React.FC<SuspendReasonModalProps> = ({
         </div>
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4 w-full">
-          <CommonButton type="submit" variant="danger" className="w-full!">
+          <CommonButton
+            type="submit"
+            variant="danger"
+            className="w-full!"
+            isLoading={isSubmitting}
+            loadingText="Suspending..."
+          >
             Suspend
           </CommonButton>
-          <CommonButton onClick={onClose} variant="cancel" className="w-full!">
+          <CommonButton
+            onClick={onClose}
+            variant="cancel"
+            className="w-full!"
+            disabled={isSubmitting}
+          >
             Cancel
           </CommonButton>
         </div>

@@ -13,6 +13,9 @@ import { RiSettingsLine } from "react-icons/ri";
 import { TbArrowDownFromArc, TbMoneybag } from "react-icons/tb";
 import LogoutModal from "./LogoutModal";
 
+import { logout } from "@/store/features/auth/authSlice";
+import { baseAPI } from "@/store/features/baseApi/baseApi";
+import { useAppDispatch } from "@/store/hooks";
 import { CiGrid42 } from "react-icons/ci";
 
 interface NavItem {
@@ -27,6 +30,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -66,10 +70,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const handleLogout = async () => {
     try {
-      router.replace("/site/login");
-    } catch {
-      /* ignore */
-    }
+      dispatch(logout());
+      dispatch(baseAPI.util.resetApiState());
+      router.replace("/");
+    } catch {}
   };
 
   const renderNavLink = (item: NavItem) => {
