@@ -3,7 +3,7 @@ import CustomSwitch from "@/app/components/common/button/CustomSwitch";
 import { Pencil, Trash2 } from "lucide-react";
 
 export interface CategoryCardData {
-  id: number;
+  id: string;
   name: string;
   description: string;
   createdDate: string;
@@ -13,9 +13,9 @@ export interface CategoryCardData {
 
 interface CategoryCardProps {
   category: CategoryCardData;
-  onToggleActive: (id: number, value: boolean) => void;
+  onToggleActive: (id: string, value: boolean) => void;
   onEdit: (category: CategoryCardData) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 export const CategoryCard = ({

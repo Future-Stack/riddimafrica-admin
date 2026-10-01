@@ -1,120 +1,137 @@
 "use client";
 
-import { useState } from "react";
+import {
+  categoryAPI,
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+  useUpdateCategoryMutation,
+} from "@/store/features/category/categoryAPI";
+import type { Category } from "@/store/features/category/types/categoryTypes";
+import { useAppDispatch } from "@/store/hooks";
+import { useMemo, useState } from "react";
 import { CategoryFormModal, CategoryFormValues } from "./CategoryModal";
 import { CategoryCard, CategoryCardData } from "./CetegoryCard";
 
-const INITIAL_CATEGORIES: CategoryCardData[] = [
-  {
-    id: 1,
-    name: "Apparel",
-    description: "Clothing, hoodies, t-shirts, and wearables",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-  {
-    id: 2,
-    name: "Music",
-    description: "Digital and physical music products",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-  {
-    id: 3,
-    name: "Accessories",
-    description: "Caps, jewellery, sunglasses, and extras",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-  {
-    id: 4,
-    name: "Prints",
-    description: "Posters, art prints, and photography",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-  {
-    id: 5,
-    name: "Bags",
-    description: "Tote bags, backpacks, and pouches",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-  {
-    id: 6,
-    name: "Digital Products",
-    description: "Digital image",
-    createdDate: "1 Jan 2025",
-    active: true,
-    productCount: 1,
-  },
-];
+const formatCreatedDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const toCategoryCard = (category: Category): CategoryCardData => ({
+  id: category.categoryId,
+  name: category.title,
+  description: category.description ?? "",
+  createdDate: formatCreatedDate(category.createdAt),
+  active: category.status === "ACTIVE",
+  productCount: category.products ?? 0,
+});
+
+const toPayload = (values: CategoryFormValues) => ({
+  title: values.name,
+  description: values.description,
+  status: values.active ? ("ACTIVE" as const) : ("INACTIVE" as const),
+});
 
 export const CategoryTab = () => {
-  const [categories, setCategories] =
-    useState<CategoryCardData[]>(INITIAL_CATEGORIES);
+  const dispatch = useAppDispatch();
+  const { data, isLoading, isError } = useGetCategoriesQuery();
+  const [createCategory] = useCreateCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const [editTarget, setEditTarget] = useState<CategoryCardData | null>(null);
+  const [formDefaults, setFormDefaults] = useState<
+    CategoryFormValues | undefined
+  >(undefined);
 
-  const handleToggleActive = (id: number, value: boolean) => {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, active: value } : c)),
+  const categories = useMemo(
+    () => (data?.data ?? []).map(toCategoryCard),
+    [data],
+  );
+
+  const activeCount = categories.filter((category) => category.active).length;
+  const inactiveCount = categories.length - activeCount;
+
+  const handleToggleActive = async (id: string, value: boolean) => {
+    const patch = dispatch(
+      categoryAPI.util.updateQueryData("getCategories", undefined, (draft) => {
+        const category = draft.data?.find((item) => item.categoryId === id);
+        if (category) {
+          category.status = value ? "ACTIVE" : "INACTIVE";
+        }
+      }),
     );
+
+    try {
+      await updateCategory({
+        id,
+        data: { status: value ? "ACTIVE" : "INACTIVE" },
+      }).unwrap();
+    } catch {
+      patch.undo();
+    }
   };
 
   const handleOpenAdd = () => {
     setModalMode("add");
     setEditTarget(null);
+    setFormDefaults(undefined);
     setModalOpen(true);
   };
 
   const handleOpenEdit = (category: CategoryCardData) => {
     setModalMode("edit");
     setEditTarget(category);
+    setFormDefaults({
+      name: category.name,
+      description: category.description,
+      active: category.active,
+    });
     setModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    setCategories((prev) => prev.filter((c) => c.id !== id));
+  const handleDelete = async (id: string) => {
+    const patch = dispatch(
+      categoryAPI.util.updateQueryData("getCategories", undefined, (draft) => {
+        if (!Array.isArray(draft.data)) return;
+        draft.data = draft.data.filter(
+          (category) => category.categoryId !== id,
+        );
+      }),
+    );
+
+    try {
+      await deleteCategory(id).unwrap();
+    } catch {
+      patch.undo();
+    }
   };
 
-  const handleSubmit = (values: CategoryFormValues) => {
+  const handleSubmit = async (values: CategoryFormValues) => {
+    const payload = toPayload(values);
+
     if (modalMode === "edit" && editTarget) {
-      setCategories((prev) =>
-        prev.map((c) => (c.id === editTarget.id ? { ...c, ...values } : c)),
-      );
-    } else {
-      const nextId = Math.max(0, ...categories.map((c) => c.id)) + 1;
-      setCategories((prev) => [
-        ...prev,
-        {
-          id: nextId,
-          name: values.name,
-          description: values.description,
-          active: values.active,
-          createdDate: new Date().toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          }),
-          productCount: 0,
-        },
-      ]);
+      await updateCategory({ id: editTarget.id, data: payload }).unwrap();
+      return;
     }
+
+    await createCategory(payload).unwrap();
   };
 
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-[#787A7F] font-medium leading-4 ">
-          {categories.filter((c) => c.active).length} active ·{" "}
-          {categories.filter((c) => !c.active).length} inactive
+          {activeCount} active · {inactiveCount} inactive
         </p>
         <button
           onClick={handleOpenAdd}
@@ -124,7 +141,15 @@ export const CategoryTab = () => {
         </button>
       </div>
 
-      {categories.length === 0 ? (
+      {isLoading ? (
+        <div className="bg-white border border-gray-100 rounded-xl p-10 text-center text-sm text-gray-400">
+          Loading categories...
+        </div>
+      ) : isError ? (
+        <div className="bg-white border border-gray-100 rounded-xl p-10 text-center text-sm text-gray-400">
+          Unable to load categories.
+        </div>
+      ) : categories.length === 0 ? (
         <div className="bg-white border border-gray-100 rounded-xl p-10 text-center text-sm text-gray-400">
           No categories yet — add one to get started.
         </div>
@@ -145,15 +170,8 @@ export const CategoryTab = () => {
       <CategoryFormModal
         isOpen={modalOpen}
         mode={modalMode}
-        initialValues={
-          modalMode === "edit" && editTarget
-            ? {
-                name: editTarget.name,
-                description: editTarget.description,
-                active: editTarget.active,
-              }
-            : undefined
-        }
+        categoryId={modalMode === "edit" ? editTarget?.id : undefined}
+        initialValues={formDefaults}
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmit}
       />

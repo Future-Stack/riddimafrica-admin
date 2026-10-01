@@ -3,38 +3,60 @@ import CustomSwitch from "@/app/components/common/button/CustomSwitch";
 import CommonHeader from "@/app/components/common/header/CommonHeader";
 import InfoField from "@/app/components/common/header/InfoField";
 import ModalShell from "@/app/components/common/ModalSeel";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+export interface UserDetailsData {
+  id: string;
+  name: string;
+  email: string;
+  status: string;
+  country: string;
+  totalLogins: string | number;
+  lastLogin: string;
+  isPresenter: boolean;
+}
 
 interface UserDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuspendTrigger: () => void;
-  user: {
-    name: string;
-    email: string;
-    status: string;
-    country: string;
-    totalLogins: number;
-    lastLogin: string;
-    songsPlayed: string;
-    purchasesMade: string;
-  };
+  onPresenterChange: (isPresenter: boolean) => Promise<void>;
+  user: UserDetailsData;
 }
 
 export const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   isOpen,
   onClose,
   onSuspendTrigger,
+  onPresenterChange,
   user,
 }) => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(user.isPresenter);
+  const [isUpdatingPresenter, setIsUpdatingPresenter] = useState(false);
+
+  useEffect(() => {
+    setIsAuthorized(user.isPresenter);
+  }, [user.id, user.isPresenter]);
+
+  const handlePresenterChange = async (checked: boolean) => {
+    setIsAuthorized(checked);
+    setIsUpdatingPresenter(true);
+    try {
+      await onPresenterChange(checked);
+    } catch {
+      setIsAuthorized(!checked);
+    } finally {
+      setIsUpdatingPresenter(false);
+    }
+  };
 
   const userStats = [
     { label: "Total Logins", value: user.totalLogins },
     { label: "Last Login", value: user.lastLogin },
-    { label: "Songs Played", value: "1,234" },
-    { label: "Purchases Made", value: "23" },
+    { label: "Songs Played", value: "—" },
+    { label: "Purchases Made", value: "—" },
   ];
+
   return (
     <ModalShell
       isOpen={isOpen}
@@ -50,8 +72,9 @@ export const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           </CommonHeader>
           <CustomSwitch
             checked={isAuthorized}
-            onCheckedChange={setIsAuthorized}
+            onCheckedChange={handlePresenterChange}
             label="Authorized as Presenter"
+            disabled={isUpdatingPresenter}
           />
         </div>
 

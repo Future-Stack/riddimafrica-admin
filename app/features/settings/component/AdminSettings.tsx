@@ -17,10 +17,13 @@ import {
   Save,
   Shield,
   Truck,
+  User,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { ProfilePanel } from "./ProfilePanel";
 
 type SettingsTab =
+  | "profile"
   | "platform"
   | "kyc"
   | "notifications"
@@ -32,6 +35,7 @@ const TABS: {
   label: string;
   icon: ReactNode;
 }[] = [
+  { key: "profile", label: "Profile", icon: <User size={16} /> },
   { key: "platform", label: "Platform", icon: <Percent size={16} /> },
   { key: "kyc", label: "KYC", icon: <CircleDot size={16} /> },
   { key: "notifications", label: "Notifications", icon: <Bell size={16} /> },
@@ -518,6 +522,11 @@ const SecurityPanel = () => {
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState<SettingsTab>("platform");
 
+  useEffect(() => {
+    const tab = new URLSearchParams(window.location.search).get("tab");
+    if (tab === "profile") setActiveTab("profile");
+  }, []);
+
   return (
     <div className="space-y-6">
       <DashboardTopSection
@@ -558,6 +567,7 @@ const AdminSettings = () => {
         </aside>
 
         <div className="min-w-0">
+          {activeTab === "profile" && <ProfilePanel />}
           {activeTab === "platform" && <PlatformPanel />}
           {activeTab === "kyc" && <KycPanel />}
           {activeTab === "notifications" && <NotificationsPanel />}

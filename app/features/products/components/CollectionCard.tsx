@@ -3,8 +3,9 @@ import CustomSwitch from "@/app/components/common/button/CustomSwitch";
 import { Pencil, Trash2 } from "lucide-react";
 
 export interface CollectionCardData {
-  id: number;
+  id: string;
   name: string;
+  description: string;
   active: boolean;
   productAvatars: string[];
   productCount: number;
@@ -12,9 +13,9 @@ export interface CollectionCardData {
 
 interface CollectionCardProps {
   collection: CollectionCardData;
-  onToggleActive: (id: number, value: boolean) => void;
+  onToggleActive: (id: string, value: boolean) => void;
   onEdit: (collection: CollectionCardData) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 export const CollectionCard = ({
