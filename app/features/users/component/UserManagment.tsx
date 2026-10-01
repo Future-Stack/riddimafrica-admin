@@ -9,98 +9,36 @@ import CommonSelect from "@/app/components/common/button/CommonSelect";
 import FilterPanel from "@/app/components/common/button/FilterPanel";
 import StatusBadge from "@/app/components/common/button/StatusBadge";
 import DashboardTopSection from "@/app/components/common/header/DashboardTopSection";
+import {
+  useGetUsersQuery,
+  useGetUserStatsQuery,
+  useSuspendUserMutation,
+  useToggleUserPresenterMutation,
+} from "@/store/features/user/userAPI";
+import type {
+  AdminUser,
+  GetUsersParams,
+  UserStatus,
+} from "@/store/features/user/types/userTypes";
 import { SuspendReasonModal } from "./SuspendResonModal";
 import UserCard from "./UserCard";
 import { UserDetailsModal } from "./UserDetailsModal";
 
-interface UserData {
-  id: number;
+interface UserRow {
+  id: string;
   name: string;
   email: string;
+  username: string;
+  phoneNumber: string;
+  profileImage: string | null;
   country: string;
-  loginCount: number;
+  loginCount: string;
   lastLogin: string;
-  status: "Active" | "Suspend";
+  status: UserStatus;
+  isPresenter: boolean;
 }
 
-const INITIAL_USERS: UserData[] = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Nigeria",
-    loginCount: 245,
-    lastLogin: "2 hours ago",
-    status: "Suspend",
-  },
-  {
-    id: 2,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Ghana",
-    loginCount: 245,
-    lastLogin: "5 hours ago",
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Nigeria",
-    loginCount: 245,
-    lastLogin: "2 hours ago",
-    status: "Suspend",
-  },
-  {
-    id: 4,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Ghana",
-    loginCount: 245,
-    lastLogin: "5 hours ago",
-    status: "Active",
-  },
-  {
-    id: 5,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Nigeria",
-    loginCount: 245,
-    lastLogin: "2 hours ago",
-    status: "Suspend",
-  },
-  {
-    id: 6,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Ghana",
-    loginCount: 245,
-    lastLogin: "5 hours ago",
-    status: "Active",
-  },
-  {
-    id: 7,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Nigeria",
-    loginCount: 245,
-    lastLogin: "2 hours ago",
-    status: "Suspend",
-  },
-  {
-    id: 8,
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    country: "Ghana",
-    loginCount: 245,
-    lastLogin: "5 hours ago",
-    status: "Active",
-  },
-];
-
 const PAGE_SIZE = 8;
-const LOGIN_ACTIVITY_HIGH = 200;
-const LOGIN_ACTIVITY_LOW = 50;
 
 const STATUS_OPTIONS = [
   { label: "All Status", value: "All" },
@@ -114,11 +52,43 @@ const LOGIN_ACTIVITY_OPTIONS = [
   { label: "Low (<50 login)", value: "Low" },
 ] as const;
 
+const EMPTY_DETAILS = {
+  id: "",
+  name: "",
+  email: "",
+  status: "",
+  country: "—",
+  totalLogins: "—",
+  lastLogin: "—",
+  isPresenter: false,
+};
+
+const toUserRow = (user: AdminUser): UserRow => ({
+  id: user.userId,
+  name: user.fullName,
+  email: user.email,
+  username: user.username,
+  phoneNumber: user.phoneNumber ?? "—",
+  profileImage: user.profileImage,
+  country: "—",
+  loginCount: "—",
+  lastLogin: "—",
+  status: user.status,
+  isPresenter: user.isPresenter ?? false,
+});
+
+const toApiStatus = (
+  statusFilter: "All" | "Active" | "Suspend",
+): UserStatus | undefined => {
+  if (statusFilter === "Active") return "active";
+  if (statusFilter === "Suspend") return "suspend";
+  return undefined;
+};
+
 export const UserManagementSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [users, setUsers] = useState<UserData[]>(INITIAL_USERS);
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "All" | "Active" | "Suspend"
   >("All");
@@ -129,14 +99,51 @@ export const UserManagementSection = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  const [viewedUser, setViewedUser] = useState<UserData | null>(null);
+  const [viewedUser, setViewedUser] = useState<UserRow | null>(null);
+  const [suspendTarget, setSuspendTarget] = useState<UserRow | null>(null);
 
-  const [suspendTarget, setSuspendTarget] = useState<UserData | null>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery.trim());
+      setCurrentPage(1);
+    }, 400);
 
-  const openDetails = (row: UserData) => setViewedUser(row);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const queryArgs: GetUsersParams = useMemo(() => {
+    const status = toApiStatus(statusFilter);
+    return {
+      page: currentPage,
+      limit: PAGE_SIZE,
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+      ...(status ? { status } : {}),
+    };
+  }, [currentPage, debouncedSearch, statusFilter]);
+
+  const statsArgs: GetUsersParams = useMemo(() => {
+    const status = toApiStatus(statusFilter);
+    return {
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+      ...(status ? { status } : {}),
+    };
+  }, [debouncedSearch, statusFilter]);
+
+  const { data: usersResponse } = useGetUsersQuery(queryArgs);
+  const { data: statsResponse } = useGetUserStatsQuery(statsArgs);
+  const [suspendUser] = useSuspendUserMutation();
+  const [toggleUserPresenter] = useToggleUserPresenterMutation();
+
+  const users = useMemo(
+    () => (usersResponse?.data ?? []).map(toUserRow),
+    [usersResponse],
+  );
+  const totalPages = Math.max(1, usersResponse?.meta?.totalPages ?? 1);
+
+  const openDetails = (row: UserRow) => setViewedUser(row);
   const closeDetails = () => setViewedUser(null);
 
-  const openSuspendFromRow = (row: UserData) => setSuspendTarget(row);
+  const openSuspendFromRow = (row: UserRow) => setSuspendTarget(row);
   const openSuspendFromDetails = () => {
     if (!viewedUser) return;
     setSuspendTarget(viewedUser);
@@ -145,16 +152,21 @@ export const UserManagementSection = () => {
 
   const closeSuspendModal = () => setSuspendTarget(null);
 
-  const confirmSuspend = (reason: string) => {
+  const confirmSuspend = async (reason: string) => {
     if (!suspendTarget) return;
-    console.log(`Suspending user ${suspendTarget.id} — reason: ${reason}`);
-
-    setUsers((prev) =>
-      prev.map((u) =>
-        u.id === suspendTarget.id ? { ...u, status: "Suspend" } : u,
-      ),
-    );
+    await suspendUser({ id: suspendTarget.id, reason }).unwrap();
     setSuspendTarget(null);
+  };
+
+  const handlePresenterChange = async (isPresenter: boolean) => {
+    if (!viewedUser) return;
+    await toggleUserPresenter({
+      id: viewedUser.id,
+      isPresenter,
+    }).unwrap();
+    setViewedUser((current) =>
+      current ? { ...current, isPresenter } : current,
+    );
   };
 
   useEffect(() => {
@@ -169,46 +181,22 @@ export const UserManagementSection = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const countryOptions = useMemo(() => {
-    const unique = Array.from(new Set(users.map((u) => u.country)));
-    return ["All", ...unique];
-  }, [users]);
+  const countryOptions = ["All"];
 
-  const filteredUsers = useMemo(() => {
-    return users.filter((u) => {
-      const q = searchQuery.toLowerCase();
-      const matchesSearch =
-        u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
-
-      const matchesStatus = statusFilter === "All" || u.status === statusFilter;
-      const matchesCountry =
-        countryFilter === "All" || u.country === countryFilter;
-
-      const matchesActivity =
-        loginActivityFilter === "All" ||
-        (loginActivityFilter === "High"
-          ? u.loginCount > LOGIN_ACTIVITY_HIGH
-          : u.loginCount < LOGIN_ACTIVITY_LOW);
-
-      return (
-        matchesSearch && matchesStatus && matchesCountry && matchesActivity
-      );
-    });
-  }, [users, searchQuery, statusFilter, countryFilter, loginActivityFilter]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE));
-  const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
-  );
-
-  const columns: Column<UserData>[] = [
+  const columns: Column<UserRow>[] = [
     {
       header: "User",
       key: "name",
       render: (row) => (
         <div className="flex items-center gap-3">
-          <img src="/Container.svg" />
+          <img
+            src={row.profileImage || "/Container.svg"}
+            alt=""
+            className="h-8 w-8 rounded-full object-cover"
+            onError={(event) => {
+              (event.target as HTMLImageElement).src = "/Container.svg";
+            }}
+          />
           <span className="font-medium text-sm sm:text-base text-[#101828] leading-5 font-inter mb-1">
             {row.name}
           </span>
@@ -259,7 +247,6 @@ export const UserManagementSection = () => {
           searchValue={searchQuery}
           onSearchChange={(value) => {
             setSearchQuery(value);
-            setCurrentPage(1);
           }}
           showFilter
           onFilterClick={() => setFilterOpen((v) => !v)}
@@ -307,11 +294,11 @@ export const UserManagementSection = () => {
       </div>
 
       <div className="">
-        <UserCard />
+        <UserCard stats={statsResponse?.data} />
       </div>
 
       <GenericTable
-        data={paginatedUsers}
+        data={users}
         columns={columns}
         headerBgColor="bg-[#3C182F]"
         pagination={{
@@ -325,16 +312,22 @@ export const UserManagementSection = () => {
         isOpen={!!viewedUser}
         onClose={closeDetails}
         onSuspendTrigger={openSuspendFromDetails}
-        user={{
-          name: viewedUser?.name ?? "",
-          email: viewedUser?.email ?? "",
-          status: viewedUser?.status ?? "",
-          country: viewedUser?.country ?? "",
-          totalLogins: viewedUser?.loginCount ?? 0,
-          lastLogin: viewedUser?.lastLogin ?? "",
-          songsPlayed: viewedUser?.lastLogin ?? "",
-          purchasesMade: viewedUser?.lastLogin ?? "",
-        }}
+        onPresenterChange={handlePresenterChange}
+        user={
+          viewedUser
+            ? {
+                id: viewedUser.id,
+                name: viewedUser.name,
+                email: viewedUser.email,
+                status:
+                  viewedUser.status === "active" ? "Active" : "Suspend",
+                country: viewedUser.country,
+                totalLogins: viewedUser.loginCount,
+                lastLogin: viewedUser.lastLogin,
+                isPresenter: viewedUser.isPresenter,
+              }
+            : EMPTY_DETAILS
+        }
       />
 
       <SuspendReasonModal

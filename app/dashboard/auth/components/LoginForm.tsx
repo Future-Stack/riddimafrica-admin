@@ -3,13 +3,25 @@
 import CommonButton from "@/app/components/common/button/CommonButton";
 import CustomCheckbox from "@/app/components/common/button/CustomCheckbox";
 import SectionHeader from "@/app/components/common/header/SectionHeader";
+import { useLoginMutation } from "@/store/features/auth/authApi";
+import {
+  clearRememberedIdentifier,
+  getRememberedIdentifier,
+  getRememberMe,
+  persistRememberedIdentifier,
+} from "@/store/features/auth/authStorage";
+import { setCredentials } from "@/store/features/auth/authSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineLockReset } from "react-icons/md";
+import { z } from "zod";
 
 export const inputClass = {
   input:
@@ -18,26 +30,76 @@ export const inputClass = {
   error: "text-red-500 text-sm mt-1",
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\+?[0-9]{7,15}$/;
+
+const loginSchema = z.object({
+  identifier: z
+    .string()
+    .trim()
+    .min(1, "Email or phone number is required")
+    .refine((v) => emailRegex.test(v) || phoneRegex.test(v), {
+      message: "Enter a valid email or phone number",
+    }),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { identifier: "", password: "" },
+  });
+
+  useEffect(() => {
+    const rememberedIdentifier = getRememberedIdentifier();
+    const shouldRemember = getRememberMe() || Boolean(rememberedIdentifier);
+
+    if (shouldRemember) setRememberMe(true);
+    if (rememberedIdentifier) {
+      reset({ identifier: rememberedIdentifier, password: "" });
+    }
+  }, [reset]);
+
+  const onSubmit = async (values: LoginFormValues) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      router.push("/dashboard");
-    } catch {
-      setError("Invalid email/phone or password. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      const response = await login({
+        email: values.identifier,
+        password: values.password,
+      });
+      if (response?.data?.data) {
+        dispatch(
+          setCredentials({
+            ...response.data.data,
+            rememberMe,
+          }),
+        );
+
+        if (rememberMe) {
+          persistRememberedIdentifier(values.identifier);
+        } else {
+          clearRememberedIdentifier();
+        }
+
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
     }
   };
 
@@ -61,7 +123,11 @@ const LoginForm = () => {
         className="flex flex-col items-center "
       />
 
-      <form onSubmit={handleSubmit} className=" space-y-4  pt-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className=" space-y-4  pt-4"
+      >
         <div className="">
           <label htmlFor="identifier" className={inputClass.label}>
             Email / Phone Number:
@@ -72,12 +138,13 @@ const LoginForm = () => {
               id="identifier"
               type="text"
               placeholder="Enter email or phone"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
+              {...register("identifier")}
               className={` pl-10 ${inputClass.input}`}
             />
           </div>
+          {errors.identifier && (
+            <p className={inputClass.error}>{errors.identifier.message}</p>
+          )}
         </div>
 
         <div className="">
@@ -89,11 +156,9 @@ const LoginForm = () => {
             <MdOutlineLockReset className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-[#637381]" />
             <input
               id="password"
-              type={showPassword ? "text" : "password "}
+              type={showPassword ? "text" : "password"}
               placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...register("password")}
               className={` pl-10 ${inputClass.input}`}
             />
 
@@ -105,10 +170,17 @@ const LoginForm = () => {
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
+          {errors.password && (
+            <p className={inputClass.error}>{errors.password.message}</p>
+          )}
         </div>
 
         <div className=" flex items-center justify-between">
-          <CustomCheckbox />
+          <CustomCheckbox
+            checked={rememberMe}
+            onCheckedChange={setRememberMe}
+            label="Remember me"
+          />
 
           <Link
             href="/forgot-password"
@@ -118,7 +190,13 @@ const LoginForm = () => {
           </Link>
         </div>
 
-        <CommonButton type="submit" size="xl" className="w-full! mt-4">
+        <CommonButton
+          loadingText={"Logging in..."}
+          isLoading={isLoading}
+          type="submit"
+          size="xl"
+          className="w-full! mt-4"
+        >
           Login
         </CommonButton>
       </form>
